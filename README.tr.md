@@ -1,17 +1,72 @@
+<div align="center">
+
 # Hava
 
-Kotlin ve Jetpack Compose ile yazılmış bir Android hava durumu uygulaması.
+**Arka planın süs değil, verinin kendisi olduğu bir Android hava durumu uygulaması.**
+
+[![Derleme ve doğrulama](https://github.com/OzcanOrhanDemirci/weather_app/actions/workflows/ci.yml/badge.svg)](https://github.com/OzcanOrhanDemirci/weather_app/actions/workflows/ci.yml)
+[![Sürüm](https://github.com/OzcanOrhanDemirci/weather_app/actions/workflows/release.yml/badge.svg)](https://github.com/OzcanOrhanDemirci/weather_app/actions/workflows/release.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
+[![Asgari SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
+[![Lisans](https://img.shields.io/badge/lisans-MIT-blue)](LICENSE)
+
+**Gençlik Kampı'nda, [Türkcell Kamp+](#bu-proje-nerede-yazıldı) Bilişim Kampı kapsamında yazıldı.**
+
+[![Türkcell Kamp+](https://img.shields.io/badge/T%C3%BCrkcell%20Kamp%2B-Bili%C5%9Fim%20Kamp%C4%B1-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
+[![Program](https://img.shields.io/badge/Program-Mobil%20Uygulama%20Geli%C5%9Ftirme-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
+[![Turkcell Akademi](https://img.shields.io/badge/Turkcell-Akademi-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
+
+*[English](README.md)*
+
+</div>
+
+---
 
 Tahmin [Open-Meteo](https://open-meteo.com) üzerinden geliyor; API anahtarı da
 hesap da gerektirmiyor. Uygulamanın kendi sunucusu yok: bildiği her şey cihazda
 duruyor. Bu yüzden ağ cevap vermeden önce ekranda hava durumu oluyor ve ağ
 gittiğinde çalışmayı sürdürüyor.
 
-*[English](README.md)*
-
 | Liste | Bir şehir | Aynı şehrin gecesi | Bağlantı yokken |
 | --- | --- | --- | --- |
 | ![Yirmi şehir](docs/images/cities.png) | ![Bir şehir](docs/images/detail-day.png) | ![Gece üçte aynı şehir](docs/images/detail-night.png) | ![Çevrimdışı](docs/images/offline.png) |
+
+## Bu proje nerede yazıldı
+
+> **Bu uygulama, Gençlik Kampı'nda düzenlenen Türkcell Kamp+ Bilişim Kampı'nın
+> Turkcell Akademi ile yürütülen Mobil Uygulama Geliştirme programında yazıldı.**
+> Eylül 2026.
+
+Kamp herkese aynı ödevi veriyor: **Kotlin** ve **Jetpack Compose** ile, ücretsiz
+**Open-Meteo** servisine bağlanan **Hava** adlı bir hava durumu uygulaması. Üç
+gün, beş anlatım, dört checkpoint, bir çalışan uygulama. Son gün her katılımcının
+elinde yirmi şehir, saatlik ve günlük tahminleri olan bir detay ekranı, bütün
+ekranlarda tutarlı gösterilen favoriler, dört asenkron durum (yükleniyor,
+içerik, boş, hata) ve kendi telefonunda kurulu imzalı bir release paketi olmalı.
+
+**Bu depo, o ödevin bir katılımcı tarafından verilmiş cevabı ve ödevin
+istediğinin ötesine bilerek geçiyor.**
+
+Amaç checkpoint'leri tikleyip bitirmek değil. Ödevin ortaya attığı ama sormadığı
+daha zor bir soruyu cevaplamak: *bir gereksinimi karşılayan uygulamayı, insanın
+telefonunda tutmayı seçtiği uygulamadan ayıran nedir?* Hava durumu uygulaması bu
+soruyu sormak için iyi bir yer, çünkü gereksinim bitirilebilecek kadar küçük ama
+işçiliğin tavanı yok. Bu yüzden ödevin şehir listesi, gök mekaniğinden
+hesaplanan yirmi canlı gökyüzüne; durum makinesi, çevrimdışı öncelikli bir veri
+katmanına; "telefonunda çalıştır" maddesi de doğrulayamadığı paketi yayımlamayı
+reddeden imzalı bir sürüm hattına dönüştü.
+
+Ödevde istenen her şey burada ve her checkpoint ölçütü kaynak kodda değil çalışan
+bir cihazda denetlendi. Üstüne eklenenler [docs/decisions](docs/decisions)
+altında kayıtlı; her biri, reddedilen daha ucuz seçenekle ve gerekçesiyle
+birlikte. Çünkü alternatifi yazılmamış bir karar, karar değil tercihtir.
+
+Kamp **Git'i de işin parçası** sayıyor, işin sonradan konulduğu bir yer olarak
+değil. Bu deponun tek amaçlı commit'lerden oluşan doğrusal bir geçmişi, korumalı
+bir `main` dalı, her pull request'te çalışan bir doğrulama hattı ve yalnızca
+kaynakla uyuşan bir etiketten çıkarılabilen bir sürümü olmasının sebebi bu.
+Hepsinin nasıl yürütüldüğü [CONTRIBUTING.md](CONTRIBUTING.md) içinde.
 
 ## Fikir
 
@@ -86,6 +141,9 @@ Katmanların nasıl konuştuğu ve sınırların neden orada olduğu için
 ./gradlew lint    # Android Lint; hata bulursa derlemeyi düşürür
 ```
 
+İkisi de her push'ta ve her pull request'te çalışıyor. Bir değişikliğin `main`
+dalına ulaşması için ikisinin de geçmesi gerekiyor.
+
 En ağır basan testler, aritmetiği kendi önceki çıktısından başka bir şeye karşı
 sınayanlar.
 
@@ -101,15 +159,23 @@ sınayanlar.
   yazılmış bir örnekle değil; çünkü elle yazılmış örnek yalnızca ayrıştırıcının
   onu yazan kişiyle hemfikir olduğunu sınar.
 
+Hattın ötesinde bu projenin diğerlerinin üstünde tuttuğu tek bir kural var:
+**bitti demeden önce ekranda çalıştır.** Yerleşim işleri, yan çevrilmiş bir
+pencerede ve 1,8 yazı ölçeğinde bakılarak doğrulanıyor; çünkü yerleşimler oralarda
+kırılıyor.
+
 ## Derleme
 
 ```bash
+git clone https://github.com/OzcanOrhanDemirci/weather_app.git
+cd weather_app
 ./gradlew :app:assembleDebug
 ```
 
 JDK 17 veya üzeri ve Android SDK Platform 36 gerekiyor. Gradle toolchain
 derleyiciyi JDK 21'e sabitliyor; böylece çıktı iş istasyonunda, derleme
-sunucusunda ve ikinci bir makinede aynı oluyor.
+sunucusunda ve ikinci bir makinede aynı oluyor. Yapılandırılacak bir şey yok:
+anahtar yok, hesap yok, elle doldurulacak `local.properties` yok.
 
 Release derlemesi, depoya hiç girmeyen bir anahtarla imzalanıyor; anahtar ya
 yok sayılan `keystore.properties` dosyasından ya da ortamdan okunuyor. İkisi de
@@ -127,7 +193,11 @@ git tag v1.0.0 && git push --tags
 
 Hat, `gradle.properties` içinde bildirilen sürümle uyuşmayan bir etiketi
 yayımlamayı reddediyor. İnsanların andığı adla cihazın karşılaştırdığı numaranın
-birbirinden ayrıldığı bir sürüm, hiç sürüm çıkarmamaktan kötüdür.
+birbirinden ayrıldığı bir sürüm, hiç sürüm çıkarmamaktan kötüdür. Hat ayrıca
+bitmiş paketin içindeki sertifikayı okuyor ve release anahtarı değilse duruyor.
+
+Bütün sürümler [CHANGELOG.md](CHANGELOG.md) içinde; anahtara ne olduğu dahil tam
+yordam [docs/RELEASE.md](docs/RELEASE.md) içinde.
 
 ## Erişilebilirlik
 
@@ -139,6 +209,11 @@ birbirinden ayrıldığı bir sürüm, hiç sürüm çıkarmamaktan kötüdür.
   fonksiyonu olduğu için, o saati durdurmak boş bir ekran değil doğru bir
   durağan görüntü bırakıyor.
 - Kontrast varsayılmıyor, hesaplanıyor; ve hesap bir test.
+- Arayüz içinde bulunduğu pencereye göre diziliyor, pencereye yayılmıyor: yan
+  çevrilmiş telefonda şehirler iki sütun, bir şehir iki panel oluyor; büyük yazı
+  ölçeğinde çakışacak etiketler ölçüyle aralanıyor.
+- İki dil de eksiksiz. Gerçekten çevrilemeyecek bir dize, sebebini söyleyen bir
+  yorumla işaretleniyor.
 
 ## Teknoloji
 
@@ -153,7 +228,25 @@ birbirinden ayrıldığı bir sürüm, hiç sürüm çıkarmamaktan kötüdür.
 | Asgari SDK | 26 (Android 8.0) |
 | Derleme SDK'sı | 36 |
 
+## Bu depoda nasıl çalışılıyor
+
+| | |
+| --- | --- |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Commit biçimi, dal adlandırma, bir pull request'in söylemesi gerekenler ve "bitti demeden önce çalıştır" kuralı. |
+| [CHANGELOG.md](CHANGELOG.md) | Yayımlanmış her sürüm ve içinde ne değiştiği. |
+| [SECURITY.md](SECURITY.md) | Uygulamanın nelere erişebildiği ve bir sorunun nasıl gizlice bildirileceği. |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Contributor Covenant. |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Modül grafiği ve sınırların nerede olduğu. |
+| [docs/RELEASE.md](docs/RELEASE.md) | Bir sürümün nasıl çıkarıldığı ve anahtara ne olduğu. |
+| [docs/decisions](docs/decisions) | Alışılmadık parçaların neden öyle olduğu. |
+
+`main` dalına doğrudan push kabul edilmiyor. Her değişiklik, doğrulama hattını
+geçmiş bir pull request ile geliyor ve geçmiş doğrusal tutuluyor.
+
 ## Lisans
 
 MIT. Bkz. [LICENSE](LICENSE). Pakete katılan Inter yazı tipi SIL Open Font
 License altında kullanılıyor; koşulları `core/designsystem/licenses` içinde.
+
+Hava verisi [Open-Meteo](https://open-meteo.com) tarafından sağlanıyor, CC BY 4.0
+altında kullanılıyor.
