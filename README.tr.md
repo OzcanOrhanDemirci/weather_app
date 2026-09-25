@@ -32,6 +32,13 @@ gittiğinde çalışmayı sürdürüyor.
 | --- | --- | --- | --- |
 | ![Yirmi şehir](docs/images/cities.png) | ![Bir şehir](docs/images/detail-day.png) | ![Gece üçte aynı şehir](docs/images/detail-night.png) | ![Çevrimdışı](docs/images/offline.png) |
 
+Yan çevrilince yayılmıyor, yeniden diziliyor: liste iki sütuna, bir şehir iki
+panele dönüşüyor. Ölçüm yerinde duruyor, tahmin onun yanında kayıyor.
+
+| İki sütun | İki panel |
+| --- | --- |
+| ![Yan çevrilmiş telefonda liste, iki sütun](docs/images/wide-cities.png) | ![Yan çevrilmiş telefonda bir şehir: solda ölçüm, sağda kayan tahmin](docs/images/wide-detail.png) |
+
 ## Bu proje nerede yazıldı
 
 > **Bu uygulama, Gençlik Kampı'nda düzenlenen Türkcell Kamp+ Bilişim Kampı'nın
