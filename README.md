@@ -54,7 +54,7 @@ Each of these is recorded in full under [docs/decisions](docs/decisions).
 
 ## Architecture
 
-Fifteen modules, wired by convention plugins so that adding one does not mean
+Thirteen modules, wired by convention plugins so that adding one does not mean
 copying twenty lines of configuration that then drift apart.
 
 ```

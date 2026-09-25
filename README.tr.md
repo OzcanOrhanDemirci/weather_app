@@ -53,7 +53,7 @@ Hepsinin tam gerekçesi [docs/decisions](docs/decisions) altında.
 
 ## Mimari
 
-On beş modül. Convention plugin'lerle bağlanıyor; böylece yeni bir modül
+On üç modül. Convention plugin'lerle bağlanıyor; böylece yeni bir modül
 eklemek, sonradan birbirinden uzaklaşacak yirmi satır yapılandırmayı kopyalamak
 anlamına gelmiyor.
 

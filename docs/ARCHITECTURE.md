@@ -2,7 +2,7 @@
 
 ## Shape
 
-Fifteen modules in three tiers. Dependencies point downwards only; nothing in a
+Thirteen modules in three tiers. Dependencies point downwards only; nothing in a
 `core` module knows that a `feature` module exists.
 
 ```
