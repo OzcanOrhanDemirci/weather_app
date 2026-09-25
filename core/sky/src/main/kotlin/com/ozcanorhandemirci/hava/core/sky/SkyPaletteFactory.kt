@@ -126,7 +126,7 @@ object SkyPaletteFactory {
             background = backdropForContent,
             content = content,
             minimum = MINIMUM_VISIBLE_VEIL,
-        )
+        ) + DIFFUSION
 
         return SkyPalette(
             zenith = zenith,
@@ -139,7 +139,7 @@ object SkyPaletteFactory {
             accent = accent,
             content = content,
             contentMuted = content.copy(alpha = 0.72f),
-            glass = veil.copy(alpha = veilAlpha),
+            glass = veil.copy(alpha = veilAlpha.coerceAtMost(1f)),
             glassEdge = Color.White.copy(alpha = if (isNight) 0.14f else 0.26f),
             isNight = isNight,
         )
@@ -156,6 +156,17 @@ object SkyPaletteFactory {
 
     /** How much of the sky color survives in the veil that darkens it. */
     private const val VEIL_HUE_RETAINED = 0.22f
+
+    /**
+     * Added on top of the opacity contrast requires.
+     *
+     * A pane has a second job the contrast calculation knows nothing about: it
+     * has to scatter what is behind it. At the minimum opacity the sun and the
+     * moon keep their edges and appear through a chart as a bright disc that
+     * reads as a defect rather than as the sky. This is the amount that turns
+     * them back into light.
+     */
+    private const val DIFFUSION = 0.16f
 
     /**
      * On a dark sky the contrast requirement is met almost immediately, but a

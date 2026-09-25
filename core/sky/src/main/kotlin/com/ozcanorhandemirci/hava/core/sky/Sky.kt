@@ -98,7 +98,7 @@ fun Sky(
             windFactor = 1f + (state.conditions.windSpeedKph / WIND_REFERENCE).toFloat(),
         )
 
-        if (detail != SkyDetail.Backdrop) {
+        run {
             drawPrecipitation(
                 field = precipitation,
                 palette = palette,
@@ -192,7 +192,7 @@ private data class Budget(val stars: Int, val clouds: Int, val particles: Int) {
         fun of(detail: SkyDetail): Budget = when (detail) {
             SkyDetail.Full -> Budget(stars = 160, clouds = 8, particles = 180)
             SkyDetail.Miniature -> Budget(stars = 40, clouds = 4, particles = 60)
-            SkyDetail.Backdrop -> Budget(stars = 120, clouds = 6, particles = 0)
+            SkyDetail.Backdrop -> Budget(stars = 120, clouds = 6, particles = 120)
         }
     }
 }

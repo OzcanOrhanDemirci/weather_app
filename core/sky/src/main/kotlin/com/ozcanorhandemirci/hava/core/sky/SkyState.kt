@@ -23,8 +23,14 @@ enum class SkyDetail {
     Miniature,
 
     /**
-     * Atmosphere only: the light, the stars and the cloud, with the glow of the
-     * sun but not its disc. Stands behind content without competing with it.
+     * Everything except the body of the sun or the moon, which is replaced by
+     * its glow.
+     *
+     * A sky standing behind content carries light, not objects. Stars are small
+     * enough to read as texture through a translucent pane and rain is in
+     * motion, but a bright disc keeps its edge and appears through a chart as
+     * something that looks like a defect. The disc belongs on a sky nothing is
+     * placed over, or on a card of its own.
      */
     Backdrop,
 }

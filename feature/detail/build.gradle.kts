@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ozcanorhandemirci.hava.feature.cities"
+    namespace = "com.ozcanorhandemirci.hava.feature.detail"
 }
 
 dependencies {

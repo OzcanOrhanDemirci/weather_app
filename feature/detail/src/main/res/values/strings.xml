@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detail_back">Back</string>
+    <string name="detail_favorite">Add to favourites</string>
+    <string name="detail_unfavorite">Remove from favourites</string>
+    <string name="detail_feels_like">Feels like %1$s</string>
+    <string name="detail_today_range">Today %1$s to %2$s</string>
+    <string name="detail_return_to_now">%1$s · back to now</string>
+    <string name="detail_today">Today</string>
+
+    <string name="detail_hourly">Next 24 hours</string>
+    <string name="detail_sun">Sun</string>
+    <string name="detail_week">This week</string>
+    <string name="detail_conditions">Conditions</string>
+
+    <string name="detail_sunrise">Sunrise</string>
+    <string name="detail_sunset">Sunset</string>
+    <string name="detail_wind">Wind</string>
+    <string name="detail_wind_value">%1$d km/h</string>
+    <string name="detail_humidity">Humidity</string>
+    <string name="detail_pressure">Pressure</string>
+    <string name="detail_pressure_value">%1$d hPa</string>
+    <string name="detail_uv">UV index</string>
+
+    <string name="detail_updated_at">Updated at %1$s</string>
+    <string name="detail_showing_stored">Showing what was last stored on this device.</string>
+    <string name="detail_try_again">Try again</string>
+    <string name="detail_missing">This place is not on the device.</string>
+
+    <string name="detail_error_offline">No connection</string>
+    <string name="detail_error_timeout">The service did not answer</string>
+    <string name="detail_error_service">The service is having trouble</string>
+    <string name="detail_error_unreadable">Unexpected answer</string>
+    <string name="detail_error_unknown_place">Place not found</string>
+    <string name="detail_error_unexpected">Something went wrong</string>
+</resources>

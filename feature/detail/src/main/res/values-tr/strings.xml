@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="detail_back">Geri</string>
+    <string name="detail_favorite">Favorilere ekle</string>
+    <string name="detail_unfavorite">Favorilerden çıkar</string>
+    <string name="detail_feels_like">Hissedilen %1$s</string>
+    <string name="detail_today_range">Bugün %1$s ile %2$s arası</string>
+    <string name="detail_return_to_now">%1$s · şimdiye dön</string>
+    <string name="detail_today">Bugün</string>
+
+    <string name="detail_hourly">Önümüzdeki 24 saat</string>
+    <string name="detail_sun">Güneş</string>
+    <string name="detail_week">Bu hafta</string>
+    <string name="detail_conditions">Ölçümler</string>
+
+    <string name="detail_sunrise">Gün doğumu</string>
+    <string name="detail_sunset">Gün batımı</string>
+    <string name="detail_wind">Rüzgâr</string>
+    <string name="detail_wind_value">%1$d km/sa</string>
+    <string name="detail_humidity">Nem</string>
+    <string name="detail_pressure">Basınç</string>
+    <string name="detail_pressure_value">%1$d hPa</string>
+    <string name="detail_uv">UV indeksi</string>
+
+    <string name="detail_updated_at">%1$s itibarıyla</string>
+    <string name="detail_showing_stored">Bu cihazda en son saklanan veri gösteriliyor.</string>
+    <string name="detail_try_again">Tekrar dene</string>
+    <string name="detail_missing">Bu yer cihazda kayıtlı değil.</string>
+
+    <string name="detail_error_offline">Bağlantı yok</string>
+    <string name="detail_error_timeout">Servis yanıt vermedi</string>
+    <string name="detail_error_service">Serviste sorun var</string>
+    <string name="detail_error_unreadable">Beklenmeyen cevap</string>
+    <string name="detail_error_unknown_place">Yer bulunamadı</string>
+    <string name="detail_error_unexpected">Bir şeyler ters gitti</string>
+</resources>
