@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- The only permissions this application asks for. It has no backend of
+         its own, reads nothing from the device, and asks for no location: a
+         city is chosen, never detected. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:name=".HavaApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
