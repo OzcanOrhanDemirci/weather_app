@@ -6,8 +6,6 @@ import androidx.compose.ui.graphics.PointMode
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
-import com.ozcanorhandemirci.hava.core.model.Intensity
-import com.ozcanorhandemirci.hava.core.model.Precipitation
 import kotlin.math.sin
 import kotlin.random.Random
 
@@ -60,36 +58,45 @@ internal class PrecipitationField(count: Int, seed: Long) {
     }
 }
 
-internal fun DrawScope.drawPrecipitation(
+/**
+ * Rain, at a strength the caller decides.
+ *
+ * Strength rather than a weather code, so a sky leaving the rain and entering
+ * snow can thin one out while it thickens the other. For a moment both are
+ * falling, which is what actually happens outside.
+ */
+internal fun DrawScope.drawRain(
     field: PrecipitationField,
     palette: SkyPalette,
-    precipitation: Precipitation,
-    intensity: Intensity,
+    strength: Float,
     seconds: Float,
     windSpeedKph: Double,
     windDirectionDegrees: Int,
 ) {
-    if (precipitation == Precipitation.NONE) return
-
-    val strength = when (intensity) {
-        Intensity.NONE -> return
-        Intensity.LIGHT -> 0.42f
-        Intensity.MODERATE -> 0.72f
-        Intensity.HEAVY -> 1f
-    }
-
-    // Wind is reported as the direction it comes from, so the drift is opposite
-    // to it. Only the across screen part of it is visible.
-    val drift = (-sin(Math.toRadians(windDirectionDegrees.toDouble())) *
-        (windSpeedKph / REFERENCE_WIND_KPH).coerceIn(0.0, 1.6)).toFloat()
-
-    when (precipitation) {
-        Precipitation.RAIN -> drawRain(field, palette, strength, seconds, drift)
-        Precipitation.SLEET -> drawRain(field, palette, strength * 0.8f, seconds, drift)
-        Precipitation.SNOW -> drawSnow(field, palette, strength, seconds, drift)
-        Precipitation.NONE -> Unit
-    }
+    if (strength <= 0.01f) return
+    drawRain(field, palette, strength, seconds, driftFrom(windSpeedKph, windDirectionDegrees))
 }
+
+/** Snow, at a strength the caller decides. */
+internal fun DrawScope.drawSnow(
+    field: PrecipitationField,
+    palette: SkyPalette,
+    strength: Float,
+    seconds: Float,
+    windSpeedKph: Double,
+    windDirectionDegrees: Int,
+) {
+    if (strength <= 0.01f) return
+    drawSnow(field, palette, strength, seconds, driftFrom(windSpeedKph, windDirectionDegrees))
+}
+
+/**
+ * Wind is reported as the direction it comes from, so the drift is opposite to
+ * it. Only the across screen part of it is visible.
+ */
+private fun driftFrom(windSpeedKph: Double, windDirectionDegrees: Int): Float =
+    (-sin(Math.toRadians(windDirectionDegrees.toDouble())) *
+        (windSpeedKph / REFERENCE_WIND_KPH).coerceIn(0.0, 1.6)).toFloat()
 
 private fun DrawScope.drawRain(
     field: PrecipitationField,

@@ -25,9 +25,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -47,6 +50,7 @@ import com.ozcanorhandemirci.hava.core.ui.CityWeatherCard
 import com.ozcanorhandemirci.hava.core.ui.adviceResource
 import com.ozcanorhandemirci.hava.core.ui.headlineResource
 import kotlin.math.abs
+import kotlinx.coroutines.delay
 import com.ozcanorhandemirci.hava.core.ui.R as UiR
 
 @Composable
@@ -82,12 +86,12 @@ internal fun CitiesScreen(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    val focused = (state as? CitiesUiState.Content)?.cities?.focusedBy(listState)
+    val following = (state as? CitiesUiState.Content)?.cities?.skyFollowing(listState)
 
     // The backdrop belongs to the card nearest the middle of the viewport, so
     // scrolling from the coast to the mountains carries the whole interface
     // with it rather than only the row under the finger.
-    SkyOf(focused?.skyConditions())
+    SkyOf(following?.skyConditions())
 
     Box(modifier = modifier.fillMaxSize()) {
         run {
@@ -279,13 +283,22 @@ private fun FailedState(reason: WeatherError, onRetry: () -> Unit) {
 }
 
 /**
- * The card nearest the middle of the viewport.
+ * The card the sky should belong to.
  *
- * Nearest the middle rather than first visible, because a list at rest between
- * two cards should settle on the one being looked at.
+ * Nearest the middle of the viewport rather than first visible, because a list
+ * at rest between two cards should settle on the one being looked at.
+ *
+ * And only once the list has stopped moving past it. Following the middle of a
+ * flick directly means the backdrop is handed a new place every few frames,
+ * and a sky that takes two seconds to arrive spends the whole flick being
+ * restarted: the weather never resolves and the screen flickers through a dozen
+ * half finished transitions. Waiting for the focus to hold still turns a fast
+ * scroll into one clean change at the end of it, while a slow scroll still
+ * follows, because a card under a slow finger holds the middle for longer than
+ * this.
  */
 @Composable
-private fun List<CitySummary>.focusedBy(listState: LazyListState): CitySummary? {
+private fun List<CitySummary>.skyFollowing(listState: LazyListState): CitySummary? {
     val cities = this
     val focusedId by remember(cities) {
         derivedStateOf {
@@ -298,7 +311,13 @@ private fun List<CitySummary>.focusedBy(listState: LazyListState): CitySummary? 
         }
     }
 
-    return focusedId?.let { id -> cities.firstOrNull { it.city.id == id } } ?: cities.firstOrNull()
+    var settledId by remember { mutableStateOf(focusedId) }
+    LaunchedEffect(focusedId) {
+        delay(SETTLE_MILLIS)
+        settledId = focusedId
+    }
+
+    return settledId?.let { id -> cities.firstOrNull { it.city.id == id } } ?: cities.firstOrNull()
 }
 
 private fun CitySummary.skyConditions(): SkyConditions? {
@@ -314,6 +333,14 @@ private fun CitySummary.skyConditions(): SkyConditions? {
 
 /** Height of the floating navigation bar plus the gap under the last card. */
 private val BOTTOM_INSET = 116.dp
+
+/**
+ * How long the focus has to hold still before the sky moves to it.
+ *
+ * Short enough that a deliberate scroll feels followed, long enough that a
+ * flick past six cities is one change rather than six.
+ */
+private const val SETTLE_MILLIS = 400L
 
 /** How far the fade reaches past the status bar itself. */
 private val VEIL_OVERHANG = 12.dp

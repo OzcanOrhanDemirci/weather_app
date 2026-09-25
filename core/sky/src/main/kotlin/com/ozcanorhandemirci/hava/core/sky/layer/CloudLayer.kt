@@ -88,9 +88,10 @@ internal fun DrawScope.drawClouds(
 ) {
     if (coverage <= 0.01f) return
 
-    val visible = (field.clouds.size * coverage).toInt().coerceAtLeast(1)
+    field.clouds.forEachIndexed { index, cloud ->
+        val presence = presenceOfCloud(index, field.clouds.size, coverage)
+        if (presence <= 0.01f) return@forEachIndexed
 
-    field.clouds.take(visible).forEach { cloud ->
         // Drift wraps through one and a half widths so a cloud leaves the screen
         // completely before it returns on the other side.
         val drift = (cloud.offset.x + seconds * cloud.speed * windFactor).mod(WRAP_WIDTH) - WRAP_MARGIN
@@ -104,7 +105,7 @@ internal fun DrawScope.drawClouds(
                 center = puffCenter(center, puff, scale).let { it.copy(y = it.y + puff.radius * scale * SHADE_DROP) },
                 radiusX = puff.radius * scale,
                 color = palette.cloudShade,
-                alpha = coverage * cloud.depth * SHADE_STRENGTH,
+                alpha = presence * cloud.depth * SHADE_STRENGTH,
             )
         }
         cloud.puffs.forEach { puff ->
@@ -112,7 +113,7 @@ internal fun DrawScope.drawClouds(
                 center = puffCenter(center, puff, scale),
                 radiusX = puff.radius * scale,
                 color = palette.cloud,
-                alpha = coverage * cloud.depth,
+                alpha = presence * cloud.depth,
             )
         }
     }
@@ -149,6 +150,21 @@ private fun DrawScope.drawSoftPuff(
     }
 }
 
+/**
+ * How present this cloud is at the given cover.
+ *
+ * Clouds are ordered, and each one starts to appear a little after the one
+ * before it, so raising the cover fills the sky rather than switching it. Taking
+ * a whole number of clouds instead would make one appear from nothing the moment
+ * the cover crossed a threshold, which is the thing this sky is trying not to
+ * do.
+ */
+private fun presenceOfCloud(index: Int, count: Int, coverage: Float): Float {
+    val startsAt = index.toFloat() / count
+    val arrival = ((coverage - startsAt) / REVEAL_SPAN).coerceIn(0f, 1f)
+    return arrival * coverage
+}
+
 /** Ring radius as a share of the puff, paired with its share of the opacity. */
 private val RINGS = listOf(
     1.00f to 0.16f,
@@ -162,5 +178,8 @@ private const val FLATTENING = 0.52f
 
 private const val WRAP_WIDTH = 1.5f
 private const val WRAP_MARGIN = 0.25f
+/** How much of the cover range one cloud takes to arrive. */
+private const val REVEAL_SPAN = 0.35f
+
 private const val SHADE_DROP = 0.30f
 private const val SHADE_STRENGTH = 0.65f

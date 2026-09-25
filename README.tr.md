@@ -50,6 +50,7 @@ Hepsinin tam gerekçesi [docs/decisions](docs/decisions) altında.
 | [Tahmin geldiği gibi saklanıyor](docs/decisions/0003-store-the-response.md) | Bütün olarak okunup bütün olarak değiştiriliyor; normalleştirmek, tel biçimini alana çevirmenin ikinci bir yolunu eklerdi. |
 | [Tek gökyüzü, gezinmenin üstünde](docs/decisions/0004-one-ambient-sky.md) | Ekranlar arasında geçmek havayı baştan başlatmamalı. |
 | [Yalnızca yayımlanmış SDK'ya derleniyor](docs/decisions/0005-released-sdk-only.md) | En yeni AndroidX, henüz yayımlanmamış bir SDK istiyor. Yalnızca tek makinede derlenen bir depo, depo değildir. |
+| [Gökyüzü acele etmez](docs/decisions/0006-the-sky-takes-its-time.md) | Havanın değişmesi, bir denetimin dokunuşa cevap vermesi değildir. Yeni bir yere varmak iki saniyeye yakın sürer; saatlik eğride parmağı izlemek saniyenin üçte biri. |
 
 ## Mimari
 
