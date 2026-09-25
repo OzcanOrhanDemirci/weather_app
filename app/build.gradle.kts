@@ -1,6 +1,7 @@
 plugins {
     id("hava.android.application")
     id("hava.android.compose")
+    id("hava.android.hilt")
 }
 
 android {
@@ -23,6 +24,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:sky"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

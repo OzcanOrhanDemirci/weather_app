@@ -30,6 +30,10 @@ gradlePlugin {
             id = "hava.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
+        register("androidHilt") {
+            id = "hava.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
         register("jvmLibrary") {
             id = "hava.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
