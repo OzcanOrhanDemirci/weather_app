@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hava</string>
-    <string name="app_tagline">Gökyüzü, şu anki hâliyle</string>
-    <string name="sky_backdrop_description">Seçili şehrin gökyüzü; anlık hava durumundan ve yerel saatten çiziliyor</string>
     <string name="tab_cities">Şehirler</string>
     <string name="tab_favorites">Favoriler</string>
     <string name="tab_search">Ara</string>
