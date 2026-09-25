@@ -42,9 +42,19 @@ type(scope): summary in the imperative, lowercase, no full stop
 ```
 
 `type` is one of `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`,
-`ci` or `chore`. `scope` is the module or feature the change lives in, such as
-`detail`, `sky` or `app`, and may be omitted when a change is genuinely
-project-wide.
+`ci`, `chore`, `style` or `revert`. `scope` is the module or feature the change
+lives in, such as `detail`, `sky` or `app`, and may be omitted when a change is
+genuinely project-wide. The whole subject stays within 80 characters, because a
+log is read at a glance.
+
+This is checked rather than asked for. The pipeline runs it on every pull
+request, and you can run it yourself before pushing:
+
+```bash
+.github/scripts/check-commit-subjects.sh
+```
+
+A convention that nothing verifies is a suggestion, and suggestions drift.
 
 **The body says why.** A reviewer can read the diff. What they cannot read is
 the option you rejected, and that is the part worth writing down:
@@ -106,11 +116,13 @@ explains where the boundaries are and why. A few rules that are easy to miss:
 ## Verification
 
 ```bash
-./gradlew test     # unit tests
-./gradlew lint     # Android Lint; an error fails the build
+./gradlew test                              # unit tests
+./gradlew lint                              # Android Lint; an error fails the build
+.github/scripts/check-commit-subjects.sh    # commit subjects
 ```
 
-Both run on every pull request and both must pass.
+All three run on every pull request and all three must pass before a change can
+reach `main`.
 
 Beyond that, this project holds one rule above the rest:
 
