@@ -30,8 +30,8 @@ android {
 
     defaultConfig {
         applicationId = "com.ozcanorhandemirci.hava"
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = providers.gradleProperty("hava.versionCode").get().toInt()
+        versionName = providers.gradleProperty("hava.versionName").get()
     }
 
     signingConfigs {
