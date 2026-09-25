@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ozcanorhandemirci.hava.core.designsystem.component.GlassSurface
+import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaLayout
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaSpacing
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 import com.ozcanorhandemirci.hava.core.model.City
@@ -54,6 +56,14 @@ fun SearchRoute(
     )
 }
 
+/**
+ * Somewhere to type a place name.
+ *
+ * The column stops widening before the window does, and sits in the middle of
+ * whatever is left. A search field drawn across a landscape screen is mostly
+ * empty, and a result three words long stranded in the centre of it is harder
+ * to read than the same result in a column the width of a phone.
+ */
 @Composable
 internal fun SearchScreen(
     query: String,
@@ -65,60 +75,63 @@ internal fun SearchScreen(
     val keyboard = LocalSoftwareKeyboardController.current
     val palette = HavaTheme.sky
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(horizontal = HavaSpacing.gutter),
-        verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
-    ) {
-        Text(
-            text = stringResource(R.string.search_title),
-            style = MaterialTheme.typography.displaySmall,
-            color = palette.content,
-            modifier = Modifier.padding(top = HavaSpacing.large),
-        )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Column(
+            modifier = Modifier
+                .widthIn(max = HavaLayout.readableWidth)
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(horizontal = HavaSpacing.gutter),
+            verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
+        ) {
+            Text(
+                text = stringResource(R.string.search_title),
+                style = MaterialTheme.typography.displaySmall,
+                color = palette.content,
+                modifier = Modifier.padding(top = HavaSpacing.large),
+            )
 
-        OutlinedTextField(
-            value = query,
-            onValueChange = onQueryChange,
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            placeholder = {
-                Text(text = stringResource(R.string.search_placeholder), color = palette.contentMuted)
-            },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
-            shape = MaterialTheme.shapes.large,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = palette.content,
-                unfocusedTextColor = palette.content,
-                cursorColor = palette.accent,
-                focusedBorderColor = palette.accent,
-                unfocusedBorderColor = palette.glassEdge,
-                focusedContainerColor = palette.glass,
-                unfocusedContainerColor = palette.glass,
-            ),
-        )
+            OutlinedTextField(
+                value = query,
+                onValueChange = onQueryChange,
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                placeholder = {
+                    Text(text = stringResource(R.string.search_placeholder), color = palette.contentMuted)
+                },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
+                shape = MaterialTheme.shapes.large,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = palette.content,
+                    unfocusedTextColor = palette.content,
+                    cursorColor = palette.accent,
+                    focusedBorderColor = palette.accent,
+                    unfocusedBorderColor = palette.glassEdge,
+                    focusedContainerColor = palette.glass,
+                    unfocusedContainerColor = palette.glass,
+                ),
+            )
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            when (state) {
-                SearchUiState.Idle -> Hint(stringResource(R.string.search_hint))
-                SearchUiState.Searching -> CircularProgressIndicator(
-                    color = palette.content,
-                    modifier = Modifier.align(Alignment.TopCenter).padding(top = HavaSpacing.section),
-                )
+            Box(modifier = Modifier.fillMaxSize()) {
+                when (state) {
+                    SearchUiState.Idle -> Hint(stringResource(R.string.search_hint))
+                    SearchUiState.Searching -> CircularProgressIndicator(
+                        color = palette.content,
+                        modifier = Modifier.align(Alignment.TopCenter).padding(top = HavaSpacing.section),
+                    )
 
-                SearchUiState.NoMatches -> Hint(stringResource(R.string.search_no_matches, query.trim()))
-                is SearchUiState.Failed -> Hint(stringResource(state.reason.headlineResource()))
+                    SearchUiState.NoMatches -> Hint(stringResource(R.string.search_no_matches, query.trim()))
+                    is SearchUiState.Failed -> Hint(stringResource(state.reason.headlineResource()))
 
-                is SearchUiState.Results -> LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = BOTTOM_INSET),
-                    verticalArrangement = Arrangement.spacedBy(HavaSpacing.small),
-                ) {
-                    items(items = state.places, key = { it.id }) { place ->
-                        PlaceRow(place = place, onClick = { onPlaceSelected(place) })
+                    is SearchUiState.Results -> LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = HavaLayout.navigationInset),
+                        verticalArrangement = Arrangement.spacedBy(HavaSpacing.small),
+                    ) {
+                        items(items = state.places, key = { it.id }) { place ->
+                            PlaceRow(place = place, onClick = { onPlaceSelected(place) })
+                        }
                     }
                 }
             }
@@ -156,6 +169,3 @@ private fun BoxScope.Hint(text: String) {
         modifier = Modifier.align(Alignment.TopCenter).padding(top = HavaSpacing.section),
     )
 }
-
-/** Room for the floating navigation bar, which stands over the list. */
-private val BOTTOM_INSET = 116.dp
