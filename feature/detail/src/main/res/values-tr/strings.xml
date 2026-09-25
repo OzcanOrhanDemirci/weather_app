@@ -18,6 +18,8 @@
     <string name="detail_wind">Rüzgâr</string>
     <string name="detail_wind_value">%1$d km/sa</string>
     <string name="detail_humidity">Nem</string>
+    <!-- Turkish writes the sign before the number. -->
+    <string name="detail_humidity_value">%%%1$d</string>
     <string name="detail_pressure">Basınç</string>
     <string name="detail_pressure_value">%1$d hPa</string>
     <string name="detail_uv">UV indeksi</string>

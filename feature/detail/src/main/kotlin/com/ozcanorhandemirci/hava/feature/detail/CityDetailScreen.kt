@@ -447,7 +447,10 @@ private fun Readings(snapshot: WeatherSnapshot) {
 
     Column(verticalArrangement = Arrangement.spacedBy(HavaSpacing.compact)) {
         Reading(stringResource(R.string.detail_wind), stringResource(R.string.detail_wind_value, current.wind.speedKph.toInt()))
-        Reading(stringResource(R.string.detail_humidity), "${current.relativeHumidityPercent}%")
+        Reading(
+            stringResource(R.string.detail_humidity),
+            stringResource(R.string.detail_humidity_value, current.relativeHumidityPercent),
+        )
         Reading(stringResource(R.string.detail_pressure), stringResource(R.string.detail_pressure_value, current.pressureHpa.toInt()))
         snapshot.today?.let {
             Reading(stringResource(R.string.detail_uv), it.uvIndexMax.toInt().toString())
