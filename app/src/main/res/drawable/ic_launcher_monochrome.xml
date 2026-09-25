@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The themed variant. The system supplies the colour, so this layer carries
+    the shape alone: no gradient, and no glow to turn into a grey smear.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:pathData="M29,40 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0 Z"
+        android:fillColor="#FFFFFF" />
+
+    <path
+        android:pathData="M37,79 C30,79 28,69 36,65 C36,53 52,49 58,58 C66,53 76,60 74,67 C80,69 79,79 73,79 Z"
+        android:fillColor="#FFFFFF" />
+</vector>
