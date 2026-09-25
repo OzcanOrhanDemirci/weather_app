@@ -1,0 +1,15 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security problem
+    url: https://github.com/OzcanOrhanDemirci/weather_app/security/advisories/new
+    about: >
+      Report privately. Please do not describe a vulnerability in a public
+      issue.
+  - name: How this repository is worked in
+    url: https://github.com/OzcanOrhanDemirci/weather_app/blob/main/CONTRIBUTING.md
+    about: Commit style, branch naming, what a pull request has to say.
+  - name: Why something is the way it is
+    url: https://github.com/OzcanOrhanDemirci/weather_app/tree/main/docs/decisions
+    about: >
+      The decisions behind the parts of this application that look unusual, each
+      with the alternative that was rejected.

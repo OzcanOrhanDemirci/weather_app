@@ -1,0 +1,89 @@
+name: Defect
+description: Something behaves differently from how it is meant to
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time. The most useful report is one that can be
+        reproduced — everything below exists to get to that.
+
+        If what you have found is a **security** problem, please close this and
+        follow [SECURITY.md](../blob/main/SECURITY.md) instead. Do not describe
+        it in a public issue.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, in the order you saw it.
+      placeholder: |
+        I opened İzmir, dragged the hourly curve to 03:00 and turned the phone
+        on its side. The temperature went back to the current hour.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reach it
+      description: >
+        Numbered steps, starting from a fresh launch. If it only happens
+        sometimes, say how often and what seems to make the difference.
+      placeholder: |
+        1. Open the application
+        2. Tap the third card
+        3. Drag the curve to the far right
+        4. Turn the phone on its side
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: >
+        The version shown on the releases page, or the commit if you built it
+        yourself.
+      placeholder: "1.2.1"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: "Pixel 7, Android 15"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: conditions
+    attributes:
+      label: Conditions
+      description: >
+        Several defects here have turned out to depend on one of these. Tick any
+        that applied.
+      multiple: true
+      options:
+        - Large font scale
+        - Screen turned on its side, or a tablet
+        - No network, or a slow one
+        - Screen reader running
+        - Animation turned off in system settings
+        - None of these
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: >
+        A screenshot, a screen recording or a logcat extract. Please remove
+        anything personal first.
