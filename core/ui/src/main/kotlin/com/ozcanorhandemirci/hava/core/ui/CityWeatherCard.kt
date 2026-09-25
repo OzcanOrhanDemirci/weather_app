@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -97,13 +101,32 @@ private fun CardFace(summary: CitySummary, modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(
-                    text = summary.city.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(HavaSpacing.small),
+                ) {
+                    Text(
+                        text = summary.city.name,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color.White,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+
+                    // A kept place is marked here as well as on its own screen.
+                    // Favouring that is only visible where it was done is not
+                    // a state the reader can see, it is one they have to
+                    // remember.
+                    if (summary.isFavorite) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = null,
+                            tint = HavaTheme.sky.accent,
+                            modifier = Modifier.size(FAVOURITE_MARK),
+                        )
+                    }
+                }
                 Text(
                     text = current?.kind?.describe() ?: stringResource(R.string.card_awaiting_reading),
                     style = MaterialTheme.typography.bodyMedium,
@@ -137,18 +160,23 @@ private fun CitySummary.conditions(): SkyConditions? {
 
 @Composable
 private fun CitySummary.spokenDescription(): String {
+    val kept = if (isFavorite) stringResource(R.string.card_kept) else ""
+
     val current = snapshot?.current
-        ?: return stringResource(R.string.card_reading_pending_description, city.name)
+        ?: return stringResource(R.string.card_reading_pending_description, city.name) + kept
 
     return stringResource(
         R.string.card_reading_description,
         city.name,
         current.temperature.format(),
         current.kind.describe(),
-    )
+    ) + kept
 }
 
 private val CARD_HEIGHT = 132.dp
+
+/** Small enough to be a mark rather than a control; the card is not a toggle. */
+private val FAVOURITE_MARK = 16.dp
 
 /** Where the scrim begins, leaving the upper half of the sky untouched. */
 private const val SCRIM_START = 0.38f

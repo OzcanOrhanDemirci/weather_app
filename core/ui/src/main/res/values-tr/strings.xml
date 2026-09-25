@@ -38,4 +38,5 @@
     <string name="error_unexpected_body">Tahmin alınamadı.</string>
 
     <string name="action_try_again">Tekrar dene</string>
+    <string name="card_kept">, favoride</string>
 </resources>

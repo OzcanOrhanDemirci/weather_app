@@ -45,4 +45,5 @@
     <string name="error_unexpected_body">The forecast could not be fetched.</string>
 
     <string name="action_try_again">Try again</string>
+    <string name="card_kept">, kept</string>
 </resources>
