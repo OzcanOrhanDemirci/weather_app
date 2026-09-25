@@ -3,4 +3,7 @@
     <string name="app_name">Hava</string>
     <string name="app_tagline">The sky, as it is right now</string>
     <string name="sky_backdrop_description">The sky above the selected city, drawn from the current weather and the local time</string>
+    <string name="tab_cities">Cities</string>
+    <string name="tab_favorites">Favourites</string>
+    <string name="tab_search">Search</string>
 </resources>

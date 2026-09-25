@@ -1,4 +1,4 @@
-package com.ozcanorhandemirci.hava.feature.cities
+package com.ozcanorhandemirci.hava.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,29 +28,26 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 import com.ozcanorhandemirci.hava.core.sky.SkyConditions
 import com.ozcanorhandemirci.hava.core.sky.SkyDetail
 import com.ozcanorhandemirci.hava.core.sky.SkyScene
-import com.ozcanorhandemirci.hava.core.ui.describe
-import com.ozcanorhandemirci.hava.core.ui.format
 
 /**
- * One city in the list.
+ * One city in a list.
  *
- * The card is the sky of that place, at this moment, with its name written on
+ * The card is the sky of that place at that moment, with its name written on
  * it. There is no weather icon because there is nothing left for one to say:
  * the rain on the card is the rain in the forecast.
  *
  * The whole card is one thing to a screen reader. Read out piece by piece it
- * would be a name, then a number, then a word, with no indication that they
- * belong together.
+ * would be a name, then a number, then a word, with nothing to say they belong
+ * together.
  */
 @Composable
-internal fun CityCard(
-    item: CityWeather,
+fun CityWeatherCard(
+    summary: CitySummary,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val forecast = item.forecast
-    val conditions = item.conditions()
-    val spoken = item.spokenDescription()
+    val conditions = summary.conditions()
+    val spoken = summary.spokenDescription()
 
     Box(
         modifier = modifier
@@ -66,21 +63,21 @@ internal fun CityCard(
                 detail = SkyDetail.Miniature,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                CardFace(item = item, modifier = Modifier.fillMaxSize())
+                CardFace(summary = summary, modifier = Modifier.fillMaxSize())
             }
         } else {
             // Before a forecast arrives the card shows the place alone rather
             // than a guess at its weather.
             Box(modifier = Modifier.fillMaxSize().background(HavaTheme.sky.glass)) {
-                CardFace(item = item, modifier = Modifier.fillMaxSize())
+                CardFace(summary = summary, modifier = Modifier.fillMaxSize())
             }
         }
     }
 }
 
 @Composable
-private fun CardFace(item: CityWeather, modifier: Modifier = Modifier) {
-    val forecast = item.forecast
+private fun CardFace(summary: CitySummary, modifier: Modifier = Modifier) {
+    val current = summary.snapshot?.current
 
     Box(
         modifier = modifier.background(
@@ -101,17 +98,14 @@ private fun CardFace(item: CityWeather, modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
-                    text = item.city.name,
+                    text = summary.city.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = when {
-                        forecast != null -> forecast.snapshot.current.kind.describe()
-                        else -> stringResource(R.string.cities_awaiting_reading)
-                    },
+                    text = current?.kind?.describe() ?: stringResource(R.string.card_awaiting_reading),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = MUTED_ON_SCRIM),
                     maxLines = 1,
@@ -119,9 +113,9 @@ private fun CardFace(item: CityWeather, modifier: Modifier = Modifier) {
                 )
             }
 
-            if (forecast != null) {
+            if (current != null) {
                 Text(
-                    text = forecast.snapshot.current.temperature.format(),
+                    text = current.temperature.format(),
                     style = HavaTheme.typography.temperatureLarge,
                     color = Color.White,
                 )
@@ -130,9 +124,8 @@ private fun CardFace(item: CityWeather, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-private fun CityWeather.conditions(): SkyConditions? {
-    val current = forecast?.snapshot?.current ?: return null
+private fun CitySummary.conditions(): SkyConditions? {
+    val current = snapshot?.current ?: return null
     return SkyConditions(
         kind = current.kind,
         instant = current.observedAt,
@@ -143,12 +136,12 @@ private fun CityWeather.conditions(): SkyConditions? {
 }
 
 @Composable
-private fun CityWeather.spokenDescription(): String {
-    val current = forecast?.snapshot?.current
-        ?: return stringResource(R.string.cities_reading_pending_description, city.name)
+private fun CitySummary.spokenDescription(): String {
+    val current = snapshot?.current
+        ?: return stringResource(R.string.card_reading_pending_description, city.name)
 
     return stringResource(
-        R.string.cities_reading_description,
+        R.string.card_reading_description,
         city.name,
         current.temperature.format(),
         current.kind.describe(),

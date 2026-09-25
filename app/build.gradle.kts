@@ -69,9 +69,14 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
     implementation(project(":core:sky"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:cities"))
+    implementation(project(":feature:detail"))
+    implementation(project(":feature:favorites"))
+    implementation(project(":feature:search"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
 }

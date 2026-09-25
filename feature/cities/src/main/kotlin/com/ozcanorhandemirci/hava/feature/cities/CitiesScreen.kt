@@ -1,20 +1,18 @@
 package com.ozcanorhandemirci.hava.feature.cities
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -41,14 +39,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ozcanorhandemirci.hava.core.designsystem.component.GlassSurface
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaSpacing
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
-import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 import com.ozcanorhandemirci.hava.core.model.WeatherError
-import com.ozcanorhandemirci.hava.core.sky.Sky
 import com.ozcanorhandemirci.hava.core.sky.SkyConditions
-import com.ozcanorhandemirci.hava.core.sky.SkyDetail
-import com.ozcanorhandemirci.hava.core.sky.animateSkyPalette
-import com.ozcanorhandemirci.hava.core.sky.rememberSkyState
+import com.ozcanorhandemirci.hava.core.ui.CitySummary
+import com.ozcanorhandemirci.hava.core.ui.SkyOf
+import com.ozcanorhandemirci.hava.core.ui.CityWeatherCard
+import com.ozcanorhandemirci.hava.core.ui.adviceResource
+import com.ozcanorhandemirci.hava.core.ui.headlineResource
 import kotlin.math.abs
+import com.ozcanorhandemirci.hava.core.ui.R as UiR
 
 @Composable
 fun CitiesRoute(
@@ -84,27 +83,14 @@ internal fun CitiesScreen(
 ) {
     val listState = rememberLazyListState()
     val focused = (state as? CitiesUiState.Content)?.cities?.focusedBy(listState)
-    val backdrop = focused?.skyConditions()
 
-    val skyState = backdrop?.let { rememberSkyState(it) }
-    val palette = animateSkyPalette(skyState?.palette ?: SkyPalette.Placeholder)
+    // The backdrop belongs to the card nearest the middle of the viewport, so
+    // scrolling from the coast to the mountains carries the whole interface
+    // with it rather than only the row under the finger.
+    SkyOf(focused?.skyConditions())
 
-    HavaTheme(palette = palette) {
-        Box(modifier = modifier.fillMaxSize()) {
-            Crossfade(
-                targetState = skyState,
-                label = "backdrop",
-                modifier = Modifier.fillMaxSize(),
-            ) { sky ->
-                if (sky != null) {
-                    Sky(
-                        state = sky,
-                        detail = SkyDetail.Backdrop,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
-            }
-
+    Box(modifier = modifier.fillMaxSize()) {
+        run {
             when (state) {
                 CitiesUiState.Loading -> LoadingState()
                 CitiesUiState.Empty -> EmptyState()
@@ -167,7 +153,9 @@ private fun CityList(
         contentPadding = PaddingValues(
             start = HavaSpacing.gutter,
             end = HavaSpacing.gutter,
-            bottom = HavaSpacing.section,
+            // Room for the floating navigation bar, which stands over the list
+            // rather than beside it.
+            bottom = BOTTOM_INSET,
         ),
         verticalArrangement = Arrangement.spacedBy(HavaSpacing.compact),
     ) {
@@ -181,8 +169,8 @@ private fun CityList(
             }
         }
 
-        items(items = state.cities, key = { it.city.id }) { item ->
-            CityCard(item = item, onClick = { onCitySelected(item.city.id) })
+        items(items = state.cities, key = { it.city.id }) { summary ->
+            CityWeatherCard(summary = summary, onClick = { onCitySelected(summary.city.id) })
         }
     }
 }
@@ -217,7 +205,7 @@ private fun ProblemBanner(reason: WeatherError, onRetry: () -> Unit) {
     GlassSurface(modifier = Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(HavaSpacing.tiny)) {
             Text(
-                text = stringResource(reason.headline()),
+                text = stringResource(reason.headlineResource()),
                 style = MaterialTheme.typography.titleMedium,
                 color = HavaTheme.sky.content,
             )
@@ -227,7 +215,7 @@ private fun ProblemBanner(reason: WeatherError, onRetry: () -> Unit) {
                 color = HavaTheme.sky.contentMuted,
             )
             TextButton(onClick = onRetry) {
-                Text(text = stringResource(R.string.action_try_again))
+                Text(text = stringResource(UiR.string.action_try_again))
             }
         }
     }
@@ -242,7 +230,10 @@ private fun LoadingState() {
 
 @Composable
 private fun EmptyState() {
-    Box(modifier = Modifier.fillMaxSize().padding(HavaSpacing.section), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxSize().padding(HavaSpacing.section),
+        contentAlignment = Alignment.Center,
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = stringResource(R.string.cities_empty_title),
@@ -261,7 +252,7 @@ private fun EmptyState() {
 @Composable
 private fun FailedState(reason: WeatherError, onRetry: () -> Unit) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(HavaSpacing.gutter).navigationBarsPadding(),
+        modifier = Modifier.fillMaxSize().padding(HavaSpacing.gutter),
         contentAlignment = Alignment.Center,
     ) {
         GlassSurface {
@@ -270,17 +261,17 @@ private fun FailedState(reason: WeatherError, onRetry: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(HavaSpacing.small),
             ) {
                 Text(
-                    text = stringResource(reason.headline()),
+                    text = stringResource(reason.headlineResource()),
                     style = MaterialTheme.typography.headlineSmall,
                     color = HavaTheme.sky.content,
                 )
                 Text(
-                    text = stringResource(reason.advice()),
+                    text = stringResource(reason.adviceResource()),
                     style = MaterialTheme.typography.bodyMedium,
                     color = HavaTheme.sky.contentMuted,
                 )
                 TextButton(onClick = onRetry) {
-                    Text(text = stringResource(R.string.action_try_again))
+                    Text(text = stringResource(UiR.string.action_try_again))
                 }
             }
         }
@@ -290,13 +281,13 @@ private fun FailedState(reason: WeatherError, onRetry: () -> Unit) {
 /**
  * The card nearest the middle of the viewport.
  *
- * Nearest the middle rather than first visible, because a list scrolled to rest
- * between two cards should settle on the one a reader is actually looking at.
+ * Nearest the middle rather than first visible, because a list at rest between
+ * two cards should settle on the one being looked at.
  */
 @Composable
-private fun List<CityWeather>.focusedBy(listState: LazyListState): CityWeather? {
+private fun List<CitySummary>.focusedBy(listState: LazyListState): CitySummary? {
     val cities = this
-    val index by remember(cities) {
+    val focusedId by remember(cities) {
         derivedStateOf {
             val layout = listState.layoutInfo
             val middle = (layout.viewportStartOffset + layout.viewportEndOffset) / 2
@@ -307,11 +298,11 @@ private fun List<CityWeather>.focusedBy(listState: LazyListState): CityWeather? 
         }
     }
 
-    return index?.let { id -> cities.firstOrNull { it.city.id == id } } ?: cities.firstOrNull()
+    return focusedId?.let { id -> cities.firstOrNull { it.city.id == id } } ?: cities.firstOrNull()
 }
 
-private fun CityWeather.skyConditions(): SkyConditions? {
-    val current = forecast?.snapshot?.current ?: return null
+private fun CitySummary.skyConditions(): SkyConditions? {
+    val current = snapshot?.current ?: return null
     return SkyConditions(
         kind = current.kind,
         instant = current.observedAt,
@@ -321,25 +312,10 @@ private fun CityWeather.skyConditions(): SkyConditions? {
     )
 }
 
+/** Height of the floating navigation bar plus the gap under the last card. */
+private val BOTTOM_INSET = 116.dp
+
 /** How far the fade reaches past the status bar itself. */
 private val VEIL_OVERHANG = 12.dp
 private const val VEIL_HOLD = 0.6f
 private const val VEIL_HOLD_ALPHA = 0.75f
-
-private fun WeatherError.headline(): Int = when (this) {
-    WeatherError.Offline -> R.string.error_offline_title
-    WeatherError.Timeout -> R.string.error_timeout_title
-    is WeatherError.Service -> R.string.error_service_title
-    WeatherError.Unreadable -> R.string.error_unreadable_title
-    WeatherError.UnknownPlace -> R.string.error_unknown_place_title
-    is WeatherError.Unexpected -> R.string.error_unexpected_title
-}
-
-private fun WeatherError.advice(): Int = when (this) {
-    WeatherError.Offline -> R.string.error_offline_body
-    WeatherError.Timeout -> R.string.error_timeout_body
-    is WeatherError.Service -> R.string.error_service_body
-    WeatherError.Unreadable -> R.string.error_unreadable_body
-    WeatherError.UnknownPlace -> R.string.error_unknown_place_body
-    is WeatherError.Unexpected -> R.string.error_unexpected_body
-}

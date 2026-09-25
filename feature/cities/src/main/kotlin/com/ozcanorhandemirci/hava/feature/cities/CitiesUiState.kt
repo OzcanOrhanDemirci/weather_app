@@ -1,20 +1,12 @@
 package com.ozcanorhandemirci.hava.feature.cities
 
-import com.ozcanorhandemirci.hava.core.data.model.CachedForecast
-import com.ozcanorhandemirci.hava.core.model.City
 import com.ozcanorhandemirci.hava.core.model.WeatherError
-
-/** One row: a place, what is known about its weather, and whether it is kept. */
-data class CityWeather(
-    val city: City,
-    val forecast: CachedForecast?,
-    val isFavorite: Boolean,
-)
+import com.ozcanorhandemirci.hava.core.ui.CitySummary
 
 /**
  * What the list of cities can be showing.
  *
- * The four states are distinct rather than a single object with flags, so a
+ * The four states are distinct types rather than one object with flags, so a
  * screen cannot render a combination that was never meant to exist, such as an
  * error and a list at the same time.
  *
@@ -35,7 +27,7 @@ sealed interface CitiesUiState {
     data class Failed(val reason: WeatherError) : CitiesUiState
 
     data class Content(
-        val cities: List<CityWeather>,
+        val cities: List<CitySummary>,
         val isRefreshing: Boolean,
         /** A refresh that failed while content was already on the screen. */
         val problem: WeatherError?,

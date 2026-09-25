@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_title">Favoriler</string>
+    <string name="favorites_empty_title">Henüz kayıtlı yer yok</string>
+    <string name="favorites_empty_body">Bir şehri açıp kalbe dokunun, gökyüzünü buradan takip edin.</string>
+</resources>

@@ -23,11 +23,17 @@ interface WeatherRepository {
     suspend fun refresh(city: City): Outcome<Unit>
 
     /**
-     * Refreshes the cities whose stored forecast is missing or old.
+     * Fetches again for the given cities.
+     *
+     * With [force] left alone, only the cities whose stored forecast is missing
+     * or old are asked for, because the service recomputes a few times an hour
+     * and asking more often spends the battery of the device to receive the
+     * same numbers. A reader who pulls the list down is not making that
+     * calculation, they are asking, so that path sets [force].
      *
      * Reports a failure only when nothing could be refreshed. If some cities
      * answered, the screen has new weather to show and an error would be
      * misleading.
      */
-    suspend fun refreshStale(cities: List<City>): Outcome<Unit>
+    suspend fun refresh(cities: List<City>, force: Boolean = false): Outcome<Unit>
 }

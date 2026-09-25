@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_title">Ara</string>
+    <string name="search_placeholder">Şehir adı</string>
+    <string name="search_hint">En az iki harf yazın.</string>
+    <string name="search_no_matches">%1$s adında bir yer bulunamadı.</string>
+</resources>
