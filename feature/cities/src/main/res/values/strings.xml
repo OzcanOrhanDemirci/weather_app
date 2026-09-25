@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cities_title">Hava</string>
+    <!-- The name of the application, which is not translated. -->
+    <string name="cities_title" translatable="false">Hava</string>
     <string name="cities_subtitle">Twenty skies, all of them right now</string>
     <string name="cities_awaiting_reading">Waiting for a reading</string>
-    <string name="cities_reading_description">%1$s, %2$s, %3$s</string>
+    <!-- Three already translated pieces joined for a screen reader. The
+         separator is the same in every language here. -->
+    <string name="cities_reading_description" translatable="false">%1$s, %2$s, %3$s</string>
     <string name="cities_reading_pending_description">%1$s, no reading yet</string>
     <string name="cities_problem_showing_stored">Showing what was last stored on this device.</string>
     <string name="cities_empty_title">No places yet</string>

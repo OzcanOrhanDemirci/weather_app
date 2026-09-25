@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temperature_degrees">%1$d°</string>
+    <!-- A number and a degree sign, which read the same in every language this
+         application ships in. Marked so that the translation check does not ask
+         for a copy of it per locale. -->
+    <string name="temperature_degrees" translatable="false">%1$d°</string>
 
     <string name="weather_clear">Clear</string>
     <string name="weather_mainly_clear">Mainly clear</string>
