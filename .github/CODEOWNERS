@@ -1,0 +1,16 @@
+# Every file in this repository is reviewed by its author.
+#
+# A single owner is not a formality here: it is what makes the protection on
+# main mean something. A pull request that changes the build, the pipeline or
+# the signing arrangements cannot land without the person who holds the key
+# having looked at it.
+
+*                       @OzcanOrhanDemirci
+
+# The parts where a mistake is expensive rather than merely wrong: the release
+# pipeline can publish, and the build logic decides what every module compiles
+# against.
+/.github/workflows/     @OzcanOrhanDemirci
+/build-logic/           @OzcanOrhanDemirci
+/gradle/                @OzcanOrhanDemirci
+/gradle.properties      @OzcanOrhanDemirci
