@@ -34,6 +34,7 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 import com.ozcanorhandemirci.hava.core.model.HourlyPoint
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 /**
@@ -221,25 +222,46 @@ private fun DrawScope.drawSelection(point: Offset, palette: SkyPalette) {
     drawCircle(color = palette.zenith, radius = 2.5f.dp.toPx(), center = point)
 }
 
+/**
+ * Draws as many hour labels as will fit without touching.
+ *
+ * The spacing cannot be a fixed number of hours. Text grows with the reader's
+ * font scale while the width of the chart does not, so a gap that is generous
+ * at the default size closes at larger ones: at a scale of 1.8 the labels ran
+ * into each other and read as a single number.
+ *
+ * The step is therefore measured rather than chosen. One label is laid out, the
+ * room one hour occupies is divided into it, and every nth hour is drawn. A
+ * label that would still meet the one before it, which can happen at either end
+ * where labels are pulled inside the chart, is dropped instead of overlapping
+ * it: a missing label is read as spacing, an overlapping one as a defect.
+ */
 private fun DrawScope.drawHourLabels(
     hours: List<HourlyPoint>,
     measurer: TextMeasurer,
     style: TextStyle,
     format: DateTimeFormatter,
 ) {
-    val step = size.width / (hours.size - 1)
-    hours.forEachIndexed { index, hour ->
-        if (index % LABEL_EVERY != 0) return@forEachIndexed
+    val perHour = size.width / (hours.size - 1)
+    val sample = measurer.measure(format.format(hours.first().time), style)
+    val room = sample.size.width * LABEL_BREATHING_ROOM
+    val every = ceil(room / perHour).toInt().coerceAtLeast(1)
 
-        val text = format.format(hour.time)
-        val layout = measurer.measure(text, style)
+    var occupiedUntil = Float.NEGATIVE_INFINITY
+
+    hours.forEachIndexed { index, hour ->
+        if (index % every != 0) return@forEachIndexed
+
+        val layout = measurer.measure(format.format(hour.time), style)
+        val left = (index * perHour - layout.size.width / 2f)
+            .coerceIn(0f, size.width - layout.size.width)
+        if (left < occupiedUntil) return@forEachIndexed
+
         drawText(
             textLayoutResult = layout,
-            topLeft = Offset(
-                x = (index * step - layout.size.width / 2f).coerceIn(0f, size.width - layout.size.width),
-                y = size.height - layout.size.height,
-            ),
+            topLeft = Offset(x = left, y = size.height - layout.size.height),
         )
+        occupiedUntil = left + layout.size.width + sample.size.width * LABEL_MINIMUM_GAP
     }
 }
 
@@ -273,4 +295,8 @@ private const val NIGHT_BAND_ALPHA = 0.22f
 private const val RAIN_COLUMN_HEIGHT = 0.18f
 private const val RAIN_COLUMN_ALPHA = 0.45f
 private const val GUIDE_ALPHA = 0.45f
-private const val LABEL_EVERY = 3
+/** How much wider than a label its share of the chart has to be. */
+private const val LABEL_BREATHING_ROOM = 2.2f
+
+/** The smallest gap between two labels, as a share of a label's width. */
+private const val LABEL_MINIMUM_GAP = 0.6f
