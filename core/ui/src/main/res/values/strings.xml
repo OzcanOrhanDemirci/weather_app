@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="temperature_degrees">%1$d°</string>
+
+    <string name="weather_clear">Clear</string>
+    <string name="weather_mainly_clear">Mainly clear</string>
+    <string name="weather_partly_cloudy">Partly cloudy</string>
+    <string name="weather_overcast">Overcast</string>
+    <string name="weather_fog">Fog</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_drizzle_heavy">Heavy drizzle</string>
+    <string name="weather_freezing_rain">Freezing rain</string>
+    <string name="weather_rain_light">Light rain</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_rain_heavy">Heavy rain</string>
+    <string name="weather_shower">Showers</string>
+    <string name="weather_shower_heavy">Heavy showers</string>
+    <string name="weather_snow_light">Light snow</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_snow_heavy">Heavy snow</string>
+    <string name="weather_snow_grains">Snow grains</string>
+    <string name="weather_thunderstorm">Thunderstorm</string>
+    <string name="weather_thunderstorm_hail">Thunderstorm with hail</string>
+    <string name="weather_unknown">Unknown</string>
+</resources>

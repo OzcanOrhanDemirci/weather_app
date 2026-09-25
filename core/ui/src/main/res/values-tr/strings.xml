@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather_clear">Açık</string>
+    <string name="weather_mainly_clear">Az bulutlu</string>
+    <string name="weather_partly_cloudy">Parçalı bulutlu</string>
+    <string name="weather_overcast">Kapalı</string>
+    <string name="weather_fog">Sisli</string>
+    <string name="weather_drizzle">Çiseleyen yağmur</string>
+    <string name="weather_drizzle_heavy">Yoğun çiseleme</string>
+    <string name="weather_freezing_rain">Dondurucu yağmur</string>
+    <string name="weather_rain_light">Hafif yağmurlu</string>
+    <string name="weather_rain">Yağmurlu</string>
+    <string name="weather_rain_heavy">Şiddetli yağmur</string>
+    <string name="weather_shower">Sağanak yağışlı</string>
+    <string name="weather_shower_heavy">Kuvvetli sağanak</string>
+    <string name="weather_snow_light">Hafif kar yağışlı</string>
+    <string name="weather_snow">Kar yağışlı</string>
+    <string name="weather_snow_heavy">Yoğun kar yağışlı</string>
+    <string name="weather_snow_grains">Kar taneli</string>
+    <string name="weather_thunderstorm">Gök gürültülü fırtına</string>
+    <string name="weather_thunderstorm_hail">Dolulu fırtına</string>
+    <string name="weather_unknown">Bilinmiyor</string>
+</resources>

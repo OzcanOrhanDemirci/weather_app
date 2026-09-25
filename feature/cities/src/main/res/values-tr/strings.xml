@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cities_subtitle">Yirmi gökyüzü, hepsi şu anki hâliyle</string>
+    <string name="cities_awaiting_reading">Ölçüm bekleniyor</string>
+    <string name="cities_reading_pending_description">%1$s, henüz ölçüm yok</string>
+    <string name="cities_problem_showing_stored">Bu cihazda en son saklanan veri gösteriliyor.</string>
+    <string name="cities_empty_title">Henüz yer yok</string>
+    <string name="cities_empty_body">Gökyüzünü takip etmek için bir şehir arayın.</string>
+
+    <string name="action_try_again">Tekrar dene</string>
+
+    <string name="error_offline_title">Bağlantı yok</string>
+    <string name="error_offline_body">Cihaz ağa ulaşamıyor.</string>
+    <string name="error_timeout_title">Servis yanıt vermedi</string>
+    <string name="error_timeout_body">Bağlantı açıldı ama zamanında cevap gelmedi.</string>
+    <string name="error_service_title">Serviste sorun var</string>
+    <string name="error_service_body">Open-Meteo hata döndürdü. Genellikle kısa sürer.</string>
+    <string name="error_unreadable_title">Beklenmeyen cevap</string>
+    <string name="error_unreadable_body">Tahmin okunamadı. Bu hata uygulamaya ait.</string>
+    <string name="error_unknown_place_title">Yer bulunamadı</string>
+    <string name="error_unknown_place_body">Servis bu yeri tanımıyor.</string>
+    <string name="error_unexpected_title">Bir şeyler ters gitti</string>
+    <string name="error_unexpected_body">Tahmin alınamadı.</string>
+</resources>

@@ -50,6 +50,33 @@ internal fun DrawScope.drawSun(
 }
 
 /**
+ * The glow of the sun or the moon without the body itself.
+ *
+ * A backdrop keeps the warmth the light throws across the sky and drops the
+ * disc, which would otherwise appear between two cards as a bright fragment
+ * that reads as a defect rather than as the sun.
+ */
+internal fun DrawScope.drawLuminaryGlow(centre: Offset, palette: SkyPalette, obscured: Float) {
+    val clarity = (1f - obscured).coerceIn(0f, 1f)
+    if (clarity <= 0.02f) return
+
+    val radius = size.minDimension * SUN_RADIUS * BACKDROP_GLOW_SPREAD
+
+    drawCircle(
+        brush = Brush.radialGradient(
+            colors = listOf(
+                palette.luminaryGlow.copy(alpha = palette.luminaryGlow.alpha * clarity),
+                Color.Transparent,
+            ),
+            center = centre,
+            radius = radius,
+        ),
+        radius = radius,
+        center = centre,
+    )
+}
+
+/**
  * Draws the moon with the phase it actually has tonight.
  *
  * The lit shape is made by covering a bright disc with a shadow disc offset
@@ -127,6 +154,9 @@ private const val GLOW_GROWTH_AT_HORIZON = 3.4f
 
 /** Above this height the atmosphere no longer widens the glow. */
 private const val HORIZON_GLOW_RANGE = 25.0
+
+/** The backdrop glow is wide and soft, because nothing marks its centre. */
+private const val BACKDROP_GLOW_SPREAD = 5.5f
 
 private const val MOON_GLOW_STRENGTH = 0.7f
 private const val MOON_GLOW_SPREAD = 3.2f
