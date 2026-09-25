@@ -4,16 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 
 /**
  * Single entry point of the application.
  *
- * The window is drawn edge to edge so the weather backdrop can extend behind
- * the system bars once the presentation layer is in place.
+ * The window is drawn edge to edge because the sky is the background of the
+ * whole screen, including the area behind the system bars.
  */
 class MainActivity : ComponentActivity() {
 
@@ -21,9 +18,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                }
+            HavaTheme {
+                HavaApp()
             }
         }
     }
