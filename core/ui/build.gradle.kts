@@ -9,5 +9,6 @@ android {
 
 dependencies {
     api(project(":core:model"))
+    api(project(":core:sky"))
     implementation(project(":core:designsystem"))
 }

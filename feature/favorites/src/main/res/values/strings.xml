@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_title">Favourites</string>
+    <string name="favorites_empty_title">Nothing kept yet</string>
+    <string name="favorites_empty_body">Open a city and tap the heart to follow its sky from here.</string>
+</resources>

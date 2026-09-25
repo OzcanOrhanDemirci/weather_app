@@ -74,14 +74,14 @@ internal class OfflineFirstWeatherRepository @Inject constructor(
             }
         }
 
-    override suspend fun refreshStale(cities: List<City>): Outcome<Unit> {
+    override suspend fun refresh(cities: List<City>, force: Boolean): Outcome<Unit> {
         val now = clock.instant()
         val storedAt = withContext(ioDispatcher) { forecastDao.retrievalTimes() }
             .associate { it.cityId to Instant.ofEpochMilli(it.retrievedAt) }
 
         val due = cities.filter { city ->
             val retrievedAt = storedAt[city.id]
-            retrievedAt == null || Duration.between(retrievedAt, now) > CachedForecast.MAX_AGE
+            force || retrievedAt == null || Duration.between(retrievedAt, now) > CachedForecast.MAX_AGE
         }
 
         if (due.isEmpty()) return Outcome.Success(Unit)

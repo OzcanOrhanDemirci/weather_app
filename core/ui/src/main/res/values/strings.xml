@@ -25,4 +25,24 @@
     <string name="weather_thunderstorm">Thunderstorm</string>
     <string name="weather_thunderstorm_hail">Thunderstorm with hail</string>
     <string name="weather_unknown">Unknown</string>
+
+    <string name="card_awaiting_reading">Waiting for a reading</string>
+    <!-- Three already translated pieces joined for a screen reader. -->
+    <string name="card_reading_description" translatable="false">%1$s, %2$s, %3$s</string>
+    <string name="card_reading_pending_description">%1$s, no reading yet</string>
+
+    <string name="error_offline_title">No connection</string>
+    <string name="error_offline_body">This device is not reaching the network.</string>
+    <string name="error_timeout_title">The service did not answer</string>
+    <string name="error_timeout_body">The connection opened but nothing came back in time.</string>
+    <string name="error_service_title">The service is having trouble</string>
+    <string name="error_service_body">Open-Meteo answered with an error. It is usually brief.</string>
+    <string name="error_unreadable_title">Unexpected answer</string>
+    <string name="error_unreadable_body">The forecast could not be read. This one is on the application.</string>
+    <string name="error_unknown_place_title">Place not found</string>
+    <string name="error_unknown_place_body">The service does not know this place.</string>
+    <string name="error_unexpected_title">Something went wrong</string>
+    <string name="error_unexpected_body">The forecast could not be fetched.</string>
+
+    <string name="action_try_again">Try again</string>
 </resources>

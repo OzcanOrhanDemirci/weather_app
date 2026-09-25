@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">City name</string>
+    <string name="search_hint">Type at least two letters.</string>
+    <string name="search_no_matches">No place named %1$s.</string>
+</resources>

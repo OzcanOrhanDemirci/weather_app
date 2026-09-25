@@ -53,8 +53,7 @@ import com.ozcanorhandemirci.hava.core.model.HourlyPoint
 import com.ozcanorhandemirci.hava.core.model.WeatherError
 import com.ozcanorhandemirci.hava.core.model.WeatherSnapshot
 import com.ozcanorhandemirci.hava.core.sky.SkyConditions
-import com.ozcanorhandemirci.hava.core.sky.SkyDetail
-import com.ozcanorhandemirci.hava.core.sky.SkyScene
+import com.ozcanorhandemirci.hava.core.ui.SkyOf
 import com.ozcanorhandemirci.hava.core.ui.describe
 import com.ozcanorhandemirci.hava.core.ui.format
 import java.time.ZoneId
@@ -142,11 +141,11 @@ private fun Loaded(
         }
     } ?: return
 
-    SkyScene(
-        conditions = conditions,
-        detail = SkyDetail.Backdrop,
-        modifier = modifier.fillMaxSize(),
-    ) {
+    // Dragging the hourly curve moves this, and with it the light behind every
+    // screen the reader can see.
+    SkyOf(conditions)
+
+    Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -6,6 +6,7 @@ import com.ozcanorhandemirci.hava.core.data.CityRepository
 import com.ozcanorhandemirci.hava.core.data.WeatherRepository
 import com.ozcanorhandemirci.hava.core.model.Outcome
 import com.ozcanorhandemirci.hava.core.model.WeatherError
+import com.ozcanorhandemirci.hava.core.ui.CitySummary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,9 +38,9 @@ class CitiesViewModel @Inject constructor(
             cities.isEmpty() -> CitiesUiState.Empty
             else -> CitiesUiState.Content(
                 cities = cities.map { city ->
-                    CityWeather(
+                    CitySummary(
                         city = city,
-                        forecast = forecasts[city.id],
+                        snapshot = forecasts[city.id]?.snapshot,
                         isFavorite = city.id in favorites,
                     )
                 },
@@ -56,10 +57,16 @@ class CitiesViewModel @Inject constructor(
     )
 
     init {
-        refresh()
+        refresh(force = false)
     }
 
-    fun refresh() {
+    /**
+     * [force] separates the fetch on opening the screen from the one a reader
+     * asks for by pulling the list down. The first skips cities whose stored
+     * forecast is still current; the second asks for all of them, because
+     * someone who pulls is asking rather than waiting.
+     */
+    fun refresh(force: Boolean = true) {
         if (isRefreshing.value) return
 
         viewModelScope.launch {
@@ -69,16 +76,12 @@ class CitiesViewModel @Inject constructor(
             // for; the screen keeps observing it separately.
             val cities = cityRepository.observeCities().first()
 
-            problem.value = when (val outcome = weatherRepository.refreshStale(cities)) {
+            problem.value = when (val outcome = weatherRepository.refresh(cities, force)) {
                 is Outcome.Success -> null
                 is Outcome.Failure -> outcome.reason
             }
             isRefreshing.value = false
         }
-    }
-
-    fun toggleFavorite(cityId: Long, isFavorite: Boolean) {
-        viewModelScope.launch { cityRepository.setFavorite(cityId, isFavorite) }
     }
 
     private companion object {
