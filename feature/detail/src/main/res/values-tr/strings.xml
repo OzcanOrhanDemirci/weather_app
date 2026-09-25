@@ -9,6 +9,7 @@
     <string name="detail_today">Bugün</string>
 
     <string name="detail_hourly">Önümüzdeki 24 saat</string>
+    <string name="detail_hourly_description">Önümüzdeki 24 saatin sıcaklığı. Şimdi %1$s, %3$s\'te %2$s\'ye iniyor, %5$s\'te %4$s\'ye çıkıyor.</string>
     <string name="detail_sun">Güneş</string>
     <string name="detail_week">Bu hafta</string>
     <string name="detail_conditions">Ölçümler</string>
