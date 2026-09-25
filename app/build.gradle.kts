@@ -22,6 +22,7 @@ android {
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:sky"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
