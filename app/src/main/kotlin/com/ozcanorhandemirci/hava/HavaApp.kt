@@ -29,6 +29,7 @@ import com.ozcanorhandemirci.hava.core.sky.Sky
 import com.ozcanorhandemirci.hava.core.sky.SkyDetail
 import com.ozcanorhandemirci.hava.core.sky.animateSkyPalette
 import com.ozcanorhandemirci.hava.core.sky.rememberSkyState
+import com.ozcanorhandemirci.hava.core.sky.rememberSkyTransition
 import com.ozcanorhandemirci.hava.core.ui.AmbientSkyState
 import com.ozcanorhandemirci.hava.core.ui.LocalAmbientSky
 import com.ozcanorhandemirci.hava.feature.cities.CitiesDestination
@@ -70,7 +71,11 @@ fun HavaApp(modifier: Modifier = Modifier) {
 
     val ambientSky = remember { AmbientSkyState() }
     val skyState = ambientSky.conditions?.let { rememberSkyState(it) }
-    val palette = animateSkyPalette(skyState?.palette ?: SkyPalette.Placeholder)
+
+    // One speed for the whole backdrop. Arriving at a different place takes its
+    // time; following a finger along the hourly curve does not.
+    val transition = rememberSkyTransition(ambientSky.conditions)
+    val palette = animateSkyPalette(skyState?.palette ?: SkyPalette.Placeholder, transition)
 
     val openCity: (Long) -> Unit = { cityId ->
         navController.navigate(CityDetailDestination(cityId))
@@ -83,6 +88,7 @@ fun HavaApp(modifier: Modifier = Modifier) {
                     Sky(
                         state = skyState,
                         detail = SkyDetail.Backdrop,
+                        transition = transition,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }

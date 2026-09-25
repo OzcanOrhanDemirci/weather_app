@@ -51,6 +51,7 @@ Each of these is recorded in full under [docs/decisions](docs/decisions).
 | [A forecast is stored as it arrived](docs/decisions/0003-store-the-response.md) | It is read as a whole and replaced as a whole, so normalising it would add a second way to turn the wire format into the domain. |
 | [One sky, above navigation](docs/decisions/0004-one-ambient-sky.md) | Moving between screens should not restart the weather. |
 | [Compiled against a released SDK](docs/decisions/0005-released-sdk-only.md) | The newest AndroidX requires an SDK that has not shipped. A repository that only builds on one machine is not a repository. |
+| [The sky takes its time](docs/decisions/0006-the-sky-takes-its-time.md) | A change of weather is not a control answering a tap. Arriving somewhere new takes nearly two seconds; following a finger along the hourly curve takes a third of one. |
 
 ## Architecture
 

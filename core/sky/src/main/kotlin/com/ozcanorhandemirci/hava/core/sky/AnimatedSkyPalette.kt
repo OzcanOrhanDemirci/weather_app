@@ -4,14 +4,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaMotion
 import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
-import com.ozcanorhandemirci.hava.core.designsystem.theme.respectingReducedMotion
 
 /**
  * A palette that travels to a new sky instead of jumping to it.
  *
- * Moving between two cities changes every color in the interface at once.
+ * Moving between two places changes every color in the interface at once.
  * Swapping them produces a flash; moving them produces the impression of the
  * weather itself changing, which is what the screen is trying to say.
  *
@@ -20,9 +18,11 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.respectingReducedMotio
  * bottom up.
  */
 @Composable
-fun animateSkyPalette(target: SkyPalette): SkyPalette {
-    val spec = respectingReducedMotion(HavaMotion.gentle<Color>())
-
+fun animateSkyPalette(
+    target: SkyPalette,
+    transition: SkyTransition,
+): SkyPalette {
+    val spec = transition.spec<Color>()
     val zenith by animateColorAsState(target.zenith, spec, label = "zenith")
     val horizon by animateColorAsState(target.horizon, spec, label = "horizon")
     val haze by animateColorAsState(target.haze, spec, label = "haze")

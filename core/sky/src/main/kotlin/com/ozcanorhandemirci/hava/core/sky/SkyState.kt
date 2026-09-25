@@ -3,8 +3,6 @@ package com.ozcanorhandemirci.hava.core.sky
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 
 /**
@@ -99,14 +97,19 @@ fun rememberSkyState(conditions: SkyConditions): SkyState = remember(conditions)
 }
 
 /**
- * Places a body on the screen.
+ * Places a body within the drawing area, as a fraction of its width and height.
  *
  * Height comes from its altitude above the horizon and side to side position
  * from its azimuth, so the arc a viewer sees is the arc the sky actually has:
  * high and long in summer, low and short in winter, and mirrored below the
  * equator, where midday is in the north.
+ *
+ * A fraction rather than a position in pixels, because the result is animated:
+ * moving between two places should carry the sun across the sky rather than
+ * teleport it, and that movement has to be expressed in numbers that survive
+ * the drawing area changing size.
  */
-internal fun SolarPosition.toScreenPosition(latitude: Double, size: Size): Offset {
+internal fun SolarPosition.toScreenFraction(latitude: Double): Pair<Float, Float> {
     val meridian = if (latitude >= 0.0) SOUTH else NORTH
     val offsetFromMeridian = (azimuthDegrees - meridian).mod(FULL_TURN)
         .let { if (it > HALF_TURN) it - FULL_TURN else it }
@@ -115,7 +118,7 @@ internal fun SolarPosition.toScreenPosition(latitude: Double, size: Size): Offse
     val vertical = HORIZON_HEIGHT -
         (HORIZON_HEIGHT - ZENITH_HEIGHT) * (altitudeDegrees / QUARTER_TURN).coerceIn(-0.25, 1.0)
 
-    return Offset(x = (horizontal * size.width).toFloat(), y = (vertical * size.height).toFloat())
+    return horizontal.toFloat() to vertical.toFloat()
 }
 
 private const val FULL_TURN = 360.0

@@ -31,6 +31,33 @@ object HavaMotion {
 
     /** Short and firm, for controls that must feel immediate under a finger. */
     fun <T> snappy(): SpringSpec<T> = spring(dampingRatio = 0.80f, stiffness = 900f)
+
+    /**
+     * The sky travelling from one place to another.
+     *
+     * Much slower than anything else here, and with no overshoot at all. A
+     * change of weather is not a control responding to a tap; it is the light
+     * changing, and light does not snap.
+     *
+     * Critically damped, so the settling time follows from the stiffness alone:
+     * a spring at this stiffness has a natural frequency near 3.7 radians per
+     * second and is within one per cent of its target after roughly 1.8
+     * seconds. That is long enough to read as movement rather than as a cut,
+     * and short enough that a reader scrolling deliberately is not waiting for
+     * the sky to catch up.
+     */
+    fun <T> atmospheric(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 14f)
+
+    /**
+     * The sky following a finger within one place.
+     *
+     * Dragging the hourly curve is direct manipulation: the reader is holding
+     * the hour, and a backdrop that arrives two seconds after the finger reads
+     * as broken rather than as calm. Still critically damped, so it settles
+     * without a bounce, and near a third of a second rather than instant, which
+     * keeps a dragged finger from making the light flicker.
+     */
+    fun <T> responsive(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 400f)
 }
 
 /**
