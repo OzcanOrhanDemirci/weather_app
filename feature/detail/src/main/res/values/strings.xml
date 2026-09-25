@@ -18,6 +18,7 @@
     <string name="detail_wind">Wind</string>
     <string name="detail_wind_value">%1$d km/h</string>
     <string name="detail_humidity">Humidity</string>
+    <string name="detail_humidity_value">%1$d%%</string>
     <string name="detail_pressure">Pressure</string>
     <string name="detail_pressure_value">%1$d hPa</string>
     <string name="detail_uv">UV index</string>
