@@ -14,8 +14,39 @@ they are.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.2.2] — 2026-09-25
+
+### Added
+
+- The hourly curve is described to a screen reader. Running TalkBack over the
+  city screen found the whole day silent: the temperature now was read out, and
+  the twenty four hours after it were a drawing. It now carries one sentence
+  giving where the curve starts and the two turns that give it its shape.
+- Seventeen previews across detail, favourites and search, which had none
+  between them. Two of the states they cover cannot be reached by using the
+  application at all.
+
+### Fixed
+
+- On a first run with no network the banner on the list said it was showing what
+  was last stored, above twenty cards that all read "waiting for a reading".
+  Nothing was stored.
+- A city with nothing stored and nothing fetchable showed a headline and two
+  buttons. It now explains the failure as well as naming it, using the two lines
+  core:ui already held in both languages.
+
+### Removed
+
+- A second copy of six error headlines that the detail module was carrying,
+  under a shared file whose own comment says they are held once rather than per
+  screen.
+
+## [Repository, unreleased]
+
 Nothing here changes the application. Everything below is about the repository
-it lives in, and no version has been cut for it.
+it lives in, and no version was cut for it.
 
 ### Added
 
@@ -126,7 +157,8 @@ search, and a release pipeline that signs and publishes what it built.
   pipeline that refuses to publish a tag disagreeing with the declared version,
   or a package signed with the wrong key.
 
-[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.0.0...v1.1.0
