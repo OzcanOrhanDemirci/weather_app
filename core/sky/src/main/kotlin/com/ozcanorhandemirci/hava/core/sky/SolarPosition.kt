@@ -169,7 +169,7 @@ object SolarGeometry {
     private fun orbitEccentricity(century: Double): Double =
         0.016708634 - century * (0.000042037 + 0.0000001267 * century)
 
-    private fun equationOfCentre(meanAnomaly: Double, century: Double): Double {
+    private fun equationOfCenter(meanAnomaly: Double, century: Double): Double {
         val anomaly = Math.toRadians(meanAnomaly)
         return sin(anomaly) * (1.914602 - century * (0.004817 + 0.000014 * century)) +
             sin(2.0 * anomaly) * (0.019993 - 0.000101 * century) +
@@ -177,7 +177,7 @@ object SolarGeometry {
     }
 
     private fun apparentLongitude(meanLongitude: Double, meanAnomaly: Double, century: Double): Double {
-        val trueLongitude = meanLongitude + equationOfCentre(meanAnomaly, century)
+        val trueLongitude = meanLongitude + equationOfCenter(meanAnomaly, century)
         return trueLongitude - 0.00569 - 0.00478 * sin(Math.toRadians(125.04 - 1934.136 * century))
     }
 

@@ -29,7 +29,7 @@ data class MoonPhase(
  *
  * A mean synodic month is used rather than a full lunar theory. The real month
  * varies by a few hours around the mean, so the phase can be off by roughly
- * half a day at worst. Drawn as a disc a few millimetres across, that error is
+ * half a day at worst. Drawn as a disc a few millimeters across, that error is
  * invisible, while the difference between drawing the true crescent and drawing
  * the same circle every night is not.
  */

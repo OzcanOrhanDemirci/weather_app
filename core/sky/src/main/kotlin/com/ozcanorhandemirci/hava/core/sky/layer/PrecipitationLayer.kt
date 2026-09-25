@@ -115,7 +115,7 @@ private fun DrawScope.drawRain(
         drawPoints(
             points = band.points,
             pointMode = PointMode.Lines,
-            color = rainColour(palette).copy(alpha = strength * band.depth * RAIN_OPACITY),
+            color = rainColor(palette).copy(alpha = strength * band.depth * RAIN_OPACITY),
             strokeWidth = (RAIN_THINNEST + band.depth * RAIN_WIDTH_RANGE) * density,
             cap = StrokeCap.Round,
         )
@@ -154,8 +154,8 @@ private fun DrawScope.drawSnow(
     }
 }
 
-/** Rain takes its colour from the sky it falls through, lifted so it stays visible. */
-private fun rainColour(palette: SkyPalette): Color =
+/** Rain takes its color from the sky it falls through, lifted so it stays visible. */
+private fun rainColor(palette: SkyPalette): Color =
     if (palette.isNight) palette.cloud else palette.haze
 
 /** A wind at which drift reaches its reference amount. */

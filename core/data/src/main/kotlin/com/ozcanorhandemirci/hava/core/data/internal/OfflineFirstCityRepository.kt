@@ -65,10 +65,10 @@ internal class OfflineFirstCityRepository @Inject constructor(
 
     override suspend fun remember(city: City) {
         withContext(ioDispatcher) {
-            // The moment the city was favoured is read back and written again,
+            // The moment the city was favored is read back and written again,
             // because an upsert of the record from search would otherwise
             // replace it with nothing and quietly drop the city out of the
-            // favourites.
+            // favorites.
             val favoritedAt = cityDao.favoritedAt(city.id)
             cityDao.upsert(listOf(city.toEntity(favoritedAt = favoritedAt)))
         }

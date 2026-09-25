@@ -51,7 +51,7 @@ private val InterText = interFamily(14.sp)
 /** Optical size tuned for headlines and numerals. */
 private val InterDisplay = interFamily(32.sp)
 
-/** Digits of even width, so a changing value does not shift its neighbours. */
+/** Digits of even width, so a changing value does not shift its neighbors. */
 private const val TABULAR_FIGURES = "tnum"
 
 /**

@@ -80,13 +80,13 @@ fun Sky(
 
         val body = state.visibleBody
         if (body.altitudeDegrees > BODY_VISIBLE_ABOVE) {
-            val centre = body.toScreenPosition(state.conditions.coordinates.latitude, size)
+            val center = body.toScreenPosition(state.conditions.coordinates.latitude, size)
             val obscured = maxOf(coverage, fog)
 
             when {
-                detail == SkyDetail.Backdrop -> drawLuminaryGlow(centre, palette, obscured)
-                state.showsSun -> drawSun(centre, palette, body.altitudeDegrees, obscured)
-                else -> drawMoon(centre, palette, state.moonPhase, obscured)
+                detail == SkyDetail.Backdrop -> drawLuminaryGlow(center, palette, obscured)
+                state.showsSun -> drawSun(center, palette, body.altitudeDegrees, obscured)
+                else -> drawMoon(center, palette, state.moonPhase, obscured)
             }
         }
 

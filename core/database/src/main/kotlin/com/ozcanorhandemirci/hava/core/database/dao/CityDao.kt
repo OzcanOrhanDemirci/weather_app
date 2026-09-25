@@ -24,7 +24,7 @@ interface CityDao {
     @Upsert
     suspend fun upsert(cities: List<CityEntity>)
 
-    /** Passing null removes the city from the favourites. */
+    /** Passing null removes the city from the favorites. */
     @Query("UPDATE cities SET favorited_at = :favoritedAt WHERE id = :id")
     suspend fun setFavorite(id: Long, favoritedAt: Long?)
 }

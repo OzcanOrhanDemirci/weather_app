@@ -75,7 +75,7 @@ class SkyPaletteFactoryTest {
     }
 
     @Test
-    fun `an overcast midday is drained of colour but stays bright`() {
+    fun `an overcast midday is drained of color but stays bright`() {
         val clear = paletteAt("2026-06-21T10:10:00Z", places.getValue("Izmir"), code = 0)
         val overcast = paletteAt("2026-06-21T10:10:00Z", places.getValue("Izmir"), code = 3)
 

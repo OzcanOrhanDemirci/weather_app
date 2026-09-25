@@ -11,7 +11,7 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.respectingReducedMotio
 /**
  * A palette that travels to a new sky instead of jumping to it.
  *
- * Moving between two cities changes every colour in the interface at once.
+ * Moving between two cities changes every color in the interface at once.
  * Swapping them produces a flash; moving them produces the impression of the
  * weather itself changing, which is what the screen is trying to say.
  *

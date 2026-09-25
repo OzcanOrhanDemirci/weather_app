@@ -71,7 +71,7 @@ fun CitiesRoute(
  *
  * The backdrop belongs to whichever card is nearest the middle of the screen,
  * so scrolling from the coast to the mountains carries the whole interface with
- * it: the sky, the colour of the text, the tint of every surface. That is the
+ * it: the sky, the color of the text, the tint of every surface. That is the
  * point of deriving the palette from the weather rather than fixing it.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,7 +132,7 @@ internal fun CitiesScreen(
  *
  * The window is drawn edge to edge because the sky belongs there, but a list
  * scrolls underneath the status bar, and a white city name arriving behind a
- * white clock makes both unreadable. A short fade of the sky colour separates
+ * white clock makes both unreadable. A short fade of the sky color separates
  * them without putting a bar across the top of the screen.
  */
 @Composable
