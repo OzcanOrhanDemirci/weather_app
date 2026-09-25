@@ -29,10 +29,4 @@
     <string name="detail_try_again">Tekrar dene</string>
     <string name="detail_missing">Bu yer cihazda kayıtlı değil.</string>
 
-    <string name="detail_error_offline">Bağlantı yok</string>
-    <string name="detail_error_timeout">Servis yanıt vermedi</string>
-    <string name="detail_error_service">Serviste sorun var</string>
-    <string name="detail_error_unreadable">Beklenmeyen cevap</string>
-    <string name="detail_error_unknown_place">Yer bulunamadı</string>
-    <string name="detail_error_unexpected">Bir şeyler ters gitti</string>
 </resources>

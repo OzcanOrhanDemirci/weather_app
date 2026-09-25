@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -56,8 +57,10 @@ import com.ozcanorhandemirci.hava.core.model.WeatherError
 import com.ozcanorhandemirci.hava.core.model.WeatherSnapshot
 import com.ozcanorhandemirci.hava.core.sky.SkyConditions
 import com.ozcanorhandemirci.hava.core.ui.SkyOf
+import com.ozcanorhandemirci.hava.core.ui.adviceResource
 import com.ozcanorhandemirci.hava.core.ui.describe
 import com.ozcanorhandemirci.hava.core.ui.format
+import com.ozcanorhandemirci.hava.core.ui.headlineResource
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -484,7 +487,7 @@ private fun Problem(reason: WeatherError, onRetry: () -> Unit) {
     GlassSurface(modifier = Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(HavaSpacing.tiny)) {
             Text(
-                text = stringResource(reason.headline()),
+                text = stringResource(reason.headlineResource()),
                 style = MaterialTheme.typography.titleMedium,
                 color = HavaTheme.sky.content,
             )
@@ -524,6 +527,14 @@ private fun Missing(onBack: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Nothing is stored for this city and nothing could be fetched.
+ *
+ * It says what went wrong and then what that means, because a headline on its
+ * own is a label rather than an explanation: a reader told only "no connection"
+ * still has to guess whether the fault is theirs, the service's or the
+ * application's.
+ */
 @Composable
 private fun Unavailable(
     reason: WeatherError,
@@ -538,9 +549,16 @@ private fun Unavailable(
                 verticalArrangement = Arrangement.spacedBy(HavaSpacing.small),
             ) {
                 Text(
-                    text = stringResource(reason.headline()),
+                    text = stringResource(reason.headlineResource()),
                     style = MaterialTheme.typography.titleMedium,
                     color = HavaTheme.sky.content,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = stringResource(reason.adviceResource()),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = HavaTheme.sky.contentMuted,
+                    textAlign = TextAlign.Center,
                 )
                 TextButton(onClick = onRetry) { Text(stringResource(R.string.detail_try_again)) }
                 TextButton(onClick = onBack) { Text(stringResource(R.string.detail_back)) }
@@ -555,15 +573,6 @@ private fun WeatherSnapshot.comingHours(): List<HourlyPoint> =
 
 private fun com.ozcanorhandemirci.hava.core.model.City.zone(): ZoneId =
     runCatching { ZoneId.of(timeZoneId) }.getOrDefault(ZoneOffset.UTC)
-
-private fun WeatherError.headline(): Int = when (this) {
-    WeatherError.Offline -> R.string.detail_error_offline
-    WeatherError.Timeout -> R.string.detail_error_timeout
-    is WeatherError.Service -> R.string.detail_error_service
-    WeatherError.Unreadable -> R.string.detail_error_unreadable
-    WeatherError.UnknownPlace -> R.string.detail_error_unknown_place
-    is WeatherError.Unexpected -> R.string.detail_error_unexpected
-}
 
 /**
  * How much of a wide window the reading takes.
