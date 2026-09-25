@@ -24,6 +24,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 import com.ozcanorhandemirci.hava.core.model.HourlyPoint
+import com.ozcanorhandemirci.hava.core.ui.format
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
@@ -47,6 +51,12 @@ import kotlin.math.roundToInt
  *
  * Every hour crossed is marked with a tick under the finger, so the movement
  * can be felt as discrete even though the line is continuous.
+ *
+ * It is also a drawing, and a drawing says nothing to a screen reader. Running
+ * one over this screen found the whole day silent: the temperature now was read
+ * out and the twenty four hours after it were not there at all. The shape is
+ * therefore described in words as well, because it is the part a reader would
+ * otherwise lose entirely rather than merely see differently.
  */
 @Composable
 internal fun HourlyCurve(
@@ -69,10 +79,13 @@ internal fun HourlyCurve(
     val selection by rememberUpdatedState(selectedIndex)
     val select by rememberUpdatedState(onSelect)
 
+    val spoken = hours.spokenShape(zone)
+
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(CURVE_HEIGHT)
+            .semantics { contentDescription = spoken }
             .pointerInput(hours.size) {
                 fun pick(x: Float) {
                     val index = ((x / size.width) * (hours.size - 1))
@@ -152,6 +165,30 @@ internal fun HourlyCurve(
             )
         }
     }
+}
+
+/**
+ * The curve as one sentence.
+ *
+ * Where it starts and the two turns that give it its shape, which is what the
+ * line shows at a glance. Reading out twenty four numbers would be accurate and
+ * useless: nobody holds a list that long, and the point of the chart is the
+ * shape rather than the readings.
+ */
+@Composable
+private fun List<HourlyPoint>.spokenShape(zone: ZoneId): String {
+    val format = remember(zone) { DateTimeFormatter.ofPattern("HH:mm").withZone(zone) }
+    val coldest = minBy { it.temperature.celsius }
+    val warmest = maxBy { it.temperature.celsius }
+
+    return stringResource(
+        R.string.detail_hourly_description,
+        first().temperature.format(),
+        coldest.temperature.format(),
+        format.format(coldest.time),
+        warmest.temperature.format(),
+        format.format(warmest.time),
+    )
 }
 
 private fun HapticFeedback.tickForHour() =
