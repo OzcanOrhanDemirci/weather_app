@@ -28,10 +28,4 @@
     <string name="detail_try_again">Try again</string>
     <string name="detail_missing">This place is not on the device.</string>
 
-    <string name="detail_error_offline">No connection</string>
-    <string name="detail_error_timeout">The service did not answer</string>
-    <string name="detail_error_service">The service is having trouble</string>
-    <string name="detail_error_unreadable">Unexpected answer</string>
-    <string name="detail_error_unknown_place">Place not found</string>
-    <string name="detail_error_unexpected">Something went wrong</string>
 </resources>
