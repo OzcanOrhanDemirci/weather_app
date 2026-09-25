@@ -14,7 +14,30 @@ they are.
 
 ## [Unreleased]
 
-Nothing yet.
+Nothing here changes the application. Everything below is about the repository
+it lives in, and no version has been cut for it.
+
+### Added
+
+- The README now says where and why this was built, and shows the layout on a
+  turned window.
+- The documents a repository is expected to carry: this changelog, contribution
+  guidance, a security policy, a code of conduct and an index for the decision
+  records.
+- Ownership, issue forms, grouped dependency updates and editor settings.
+- A check that commit subjects follow the convention CONTRIBUTING declares, as a
+  script that can be run before pushing rather than only in the pipeline.
+- A social preview image, built from the application's own palette, typeface and
+  screenshots.
+
+### Changed
+
+- The workflow actions moved off the Node 20 runtime GitHub is retiring.
+- The pipeline keeps test reports as well as lint reports, because the run worth
+  reading is the one that failed.
+- `main` is protected: no direct pushes, no force pushes, linear history, and
+  both checks required.
+- kotest updated from 6.0.7 to 6.2.5.
 
 ## [1.2.1] — 2026-09-25
 
