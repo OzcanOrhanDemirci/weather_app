@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,8 +28,9 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 import com.ozcanorhandemirci.hava.core.model.DailyPoint
 import com.ozcanorhandemirci.hava.core.ui.describe
 import com.ozcanorhandemirci.hava.core.ui.format
+import androidx.compose.ui.text.intl.Locale
 import java.time.format.TextStyle as DateTextStyle
-import java.util.Locale
+import java.util.Locale as JavaLocale
 
 /**
  * The week ahead.
@@ -46,7 +48,11 @@ internal fun DailyOutlook(days: List<DailyPoint>, modifier: Modifier = Modifier)
     val coldest = days.minOf { it.minimum.celsius }.toFloat()
     val warmest = days.maxOf { it.maximum.celsius }.toFloat()
     val span = (warmest - coldest).takeIf { it > 0.5f } ?: 1f
-    val locale = Locale.getDefault()
+    // Read through the composition rather than from the platform directly, so
+    // that changing the language of the device renames the days without a
+    // restart.
+    val languageTag = Locale.current.toLanguageTag()
+    val locale = remember(languageTag) { JavaLocale.forLanguageTag(languageTag) }
 
     Column(
         modifier = modifier.fillMaxWidth(),
