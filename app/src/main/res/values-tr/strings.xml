@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Hava</string>
     <string name="app_tagline">Gökyüzü, şu anki hâliyle</string>
+    <string name="sky_backdrop_description">Seçili şehrin gökyüzü; anlık hava durumundan ve yerel saatten çiziliyor</string>
 </resources>

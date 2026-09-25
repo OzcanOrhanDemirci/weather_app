@@ -37,3 +37,4 @@ rootProject.name = "hava"
 include(":app")
 include(":core:model")
 include(":core:designsystem")
+include(":core:sky")
