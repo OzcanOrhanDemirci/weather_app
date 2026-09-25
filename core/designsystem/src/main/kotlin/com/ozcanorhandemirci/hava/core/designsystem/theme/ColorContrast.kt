@@ -34,14 +34,14 @@ object ColorContrast {
             0.0722 * channel(color.blue)
     }
 
-    /** Contrast ratio between two opaque colours, from 1.0 to 21.0. */
+    /** Contrast ratio between two opaque colors, from 1.0 to 21.0. */
     fun ratio(foreground: Color, background: Color): Double {
         val a = relativeLuminance(foreground)
         val b = relativeLuminance(background)
         return (max(a, b) + 0.05) / (min(a, b) + 0.05)
     }
 
-    /** Flattens a translucent colour onto an opaque one. */
+    /** Flattens a translucent color onto an opaque one. */
     fun composite(foreground: Color, background: Color): Color {
         val alpha = foreground.alpha
         return Color(

@@ -46,7 +46,7 @@ internal class OfflineFirstWeatherRepository @Inject constructor(
      *
      * The stored document is several kilobytes of text and the city list reads
      * every one of them whenever anything in the database changes, including a
-     * favourite being toggled. Parsing is skipped when the stored row has not
+     * favorite being toggled. Parsing is skipped when the stored row has not
      * moved, which is nearly always.
      */
     private val parsed = ConcurrentHashMap<Long, ParsedForecast>()

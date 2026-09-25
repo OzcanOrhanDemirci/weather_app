@@ -20,6 +20,6 @@ interface CityRepository {
     /** Looks a place up by name. Results are not stored until one is opened. */
     suspend fun search(query: String): Outcome<List<City>>
 
-    /** Stores a place found through search, so it can be favoured and cached. */
+    /** Stores a place found through search, so it can be favored and cached. */
     suspend fun remember(city: City)
 }

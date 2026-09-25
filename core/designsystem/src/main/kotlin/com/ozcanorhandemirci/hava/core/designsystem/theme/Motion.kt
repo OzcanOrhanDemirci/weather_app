@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalContext
  */
 object HavaMotion {
 
-    /** Settling with no overshoot. For colour, opacity and anything read as text. */
+    /** Settling with no overshoot. For color, opacity and anything read as text. */
     fun <T> gentle(): SpringSpec<T> = spring(dampingRatio = 0.92f, stiffness = 220f)
 
     /** The default for position and size changes. */

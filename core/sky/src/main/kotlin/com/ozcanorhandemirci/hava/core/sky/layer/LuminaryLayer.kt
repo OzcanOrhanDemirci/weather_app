@@ -17,7 +17,7 @@ import kotlin.math.abs
  * midday sun rather than merely lower.
  */
 internal fun DrawScope.drawSun(
-    centre: Offset,
+    center: Offset,
     palette: SkyPalette,
     altitudeDegrees: Double,
     obscured: Float,
@@ -35,17 +35,44 @@ internal fun DrawScope.drawSun(
                 palette.luminaryGlow.copy(alpha = palette.luminaryGlow.alpha * clarity),
                 Color.Transparent,
             ),
-            center = centre,
+            center = center,
             radius = glowRadius,
         ),
         radius = glowRadius,
-        center = centre,
+        center = center,
     )
 
     drawCircle(
         color = palette.luminary.copy(alpha = clarity),
         radius = radius,
-        center = centre,
+        center = center,
+    )
+}
+
+/**
+ * The glow of the sun or the moon without the body itself.
+ *
+ * A backdrop keeps the warmth the light throws across the sky and drops the
+ * disc, which would otherwise appear between two cards as a bright fragment
+ * that reads as a defect rather than as the sun.
+ */
+internal fun DrawScope.drawLuminaryGlow(center: Offset, palette: SkyPalette, obscured: Float) {
+    val clarity = (1f - obscured).coerceIn(0f, 1f)
+    if (clarity <= 0.02f) return
+
+    val radius = size.minDimension * SUN_RADIUS * BACKDROP_GLOW_SPREAD
+
+    drawCircle(
+        brush = Brush.radialGradient(
+            colors = listOf(
+                palette.luminaryGlow.copy(alpha = palette.luminaryGlow.alpha * clarity),
+                Color.Transparent,
+            ),
+            center = center,
+            radius = radius,
+        ),
+        radius = radius,
+        center = center,
     )
 }
 
@@ -57,7 +84,7 @@ internal fun DrawScope.drawSun(
  * crescent through the quarters to full, without a separate drawing for each.
  */
 internal fun DrawScope.drawMoon(
-    centre: Offset,
+    center: Offset,
     palette: SkyPalette,
     phase: MoonPhase,
     obscured: Float,
@@ -73,21 +100,21 @@ internal fun DrawScope.drawMoon(
                 palette.luminaryGlow.copy(alpha = palette.luminaryGlow.alpha * clarity * MOON_GLOW_STRENGTH),
                 Color.Transparent,
             ),
-            center = centre,
+            center = center,
             radius = radius * MOON_GLOW_SPREAD,
         ),
         radius = radius * MOON_GLOW_SPREAD,
-        center = centre,
+        center = center,
     )
 
     // The disc and its shadow are drawn into a separate layer so the shadow can
     // erase the disc without also erasing the sky behind it.
     drawContext.canvas.saveLayer(
         bounds = androidx.compose.ui.geometry.Rect(
-            left = centre.x - radius * MOON_GLOW_SPREAD,
-            top = centre.y - radius * MOON_GLOW_SPREAD,
-            right = centre.x + radius * MOON_GLOW_SPREAD,
-            bottom = centre.y + radius * MOON_GLOW_SPREAD,
+            left = center.x - radius * MOON_GLOW_SPREAD,
+            top = center.y - radius * MOON_GLOW_SPREAD,
+            right = center.x + radius * MOON_GLOW_SPREAD,
+            bottom = center.y + radius * MOON_GLOW_SPREAD,
         ),
         paint = androidx.compose.ui.graphics.Paint(),
     )
@@ -95,12 +122,12 @@ internal fun DrawScope.drawMoon(
     drawCircle(
         color = palette.luminary.copy(alpha = clarity),
         radius = radius,
-        center = centre,
+        center = center,
     )
 
     if (!phase.isFull) {
-        // How far the shadow sits from the centre. At the quarters it sits on
-        // the centre and cuts the disc in half; near new moon it barely
+        // How far the shadow sits from the center. At the quarters it sits on
+        // the center and cuts the disc in half; near new moon it barely
         // overlaps, leaving a sliver.
         val shadowOffset = radius * 2f * (0.5f - abs(phase.illumination.toFloat() - 0.5f)).let {
             1f - 2f * it
@@ -110,7 +137,7 @@ internal fun DrawScope.drawMoon(
         drawCircle(
             color = Color.Transparent,
             radius = radius * SHADOW_RADIUS,
-            center = Offset(centre.x + direction * shadowOffset, centre.y),
+            center = Offset(center.x + direction * shadowOffset, center.y),
             blendMode = BlendMode.Clear,
         )
     }
@@ -127,6 +154,9 @@ private const val GLOW_GROWTH_AT_HORIZON = 3.4f
 
 /** Above this height the atmosphere no longer widens the glow. */
 private const val HORIZON_GLOW_RANGE = 25.0
+
+/** The backdrop glow is wide and soft, because nothing marks its center. */
+private const val BACKDROP_GLOW_SPREAD = 5.5f
 
 private const val MOON_GLOW_STRENGTH = 0.7f
 private const val MOON_GLOW_SPREAD = 3.2f

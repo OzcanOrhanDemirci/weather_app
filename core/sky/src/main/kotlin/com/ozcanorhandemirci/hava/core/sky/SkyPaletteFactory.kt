@@ -10,7 +10,7 @@ import com.ozcanorhandemirci.hava.core.model.Precipitation
 import com.ozcanorhandemirci.hava.core.model.WeatherKind
 
 /**
- * Turns conditions into the colours of a sky.
+ * Turns conditions into the colors of a sky.
  *
  * Two inputs decide a sky, in this order. The height of the sun sets the light,
  * because the difference between noon and midnight is larger than the
@@ -42,7 +42,7 @@ object SkyPaletteFactory {
     }
 
     /**
-     * The colours of the light itself, before any weather.
+     * The colors of the light itself, before any weather.
      *
      * Interpolated between heights that matter: astronomical night, the blue
      * hour, the horizon crossing, the golden hour, and full day.
@@ -118,7 +118,7 @@ object SkyPaletteFactory {
         // raising its opacity would lower the contrast instead of raising it,
         // and the search for a sufficient opacity would never terminate
         // successfully. It keeps the hue of the sky it covers so that a pane on
-        // a winter dusk is not the same colour as one on a summer noon.
+        // a winter dusk is not the same color as one on a summer noon.
         val veil = lerp(Color.Black, haze, VEIL_HUE_RETAINED)
         val backdropForContent = lerp(zenith, horizon, CONTENT_SITS_AT)
         val veilAlpha = ColorContrast.minimumVeilAlpha(
@@ -154,7 +154,7 @@ object SkyPaletteFactory {
     /** Height on the screen where a pane of content typically sits. */
     private const val CONTENT_SITS_AT = 0.45f
 
-    /** How much of the sky colour survives in the veil that darkens it. */
+    /** How much of the sky color survives in the veil that darkens it. */
     private const val VEIL_HUE_RETAINED = 0.22f
 
     /**
@@ -169,7 +169,7 @@ object SkyPaletteFactory {
 }
 
 /**
- * The colours of one sky before they are published as roles.
+ * The colors of one sky before they are published as roles.
  *
  * Kept separate from [SkyPalette] so the blending arithmetic has somewhere to
  * live that does not leak into the design system contract.
@@ -198,7 +198,7 @@ internal data class SkyLight(
 
     /**
      * Mixes the sky towards a grey of its own brightness, which is what cloud
-     * does: it removes colour without deciding whether the result is light or
+     * does: it removes color without deciding whether the result is light or
      * dark. An overcast noon stays bright; an overcast midnight stays black.
      */
     fun drainedTowardsGrey(amount: Float) = mapSky { color ->

@@ -7,13 +7,26 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 
-/** How much of the sky to draw. A card in a list cannot afford what a screen can. */
+/**
+ * How much of the sky to draw.
+ *
+ * Not only a question of cost. A sky standing behind a list is doing a
+ * different job from one a reader is looking at directly: it sets the color of
+ * everything on top of it, and anything sharp in it shows through the gaps
+ * between cards as a fragment rather than as a sun.
+ */
 enum class SkyDetail {
-    /** A full screen backdrop. */
+    /** Everything. For a screen whose subject is the sky itself. */
     Full,
 
-    /** A card sized backdrop, drawn many times at once. */
+    /** A card sized sky, drawn many times at once. */
     Miniature,
+
+    /**
+     * Atmosphere only: the light, the stars and the cloud, with the glow of the
+     * sun but not its disc. Stands behind content without competing with it.
+     */
+    Backdrop,
 }
 
 /**

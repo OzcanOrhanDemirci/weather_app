@@ -22,7 +22,7 @@ data class HourlyPoint(
     val apparentTemperature: Temperature,
     val kind: WeatherKind,
     val precipitationProbabilityPercent: Int,
-    val precipitationMillimetres: Double,
+    val precipitationMillimeters: Double,
     val windSpeedKph: Double,
     val isDay: Boolean,
 )

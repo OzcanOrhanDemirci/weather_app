@@ -94,14 +94,14 @@ internal fun DrawScope.drawClouds(
         // Drift wraps through one and a half widths so a cloud leaves the screen
         // completely before it returns on the other side.
         val drift = (cloud.offset.x + seconds * cloud.speed * windFactor).mod(WRAP_WIDTH) - WRAP_MARGIN
-        val centre = Offset(drift * size.width, cloud.offset.y * size.height)
+        val center = Offset(drift * size.width, cloud.offset.y * size.height)
         val scale = cloud.scale * size.minDimension
 
         // The shaded underside of the whole cloud is laid down before any of the
         // lit body, so the shadow does not show through the puff in front of it.
         cloud.puffs.forEach { puff ->
             drawSoftPuff(
-                centre = puffCentre(centre, puff, scale).let { it.copy(y = it.y + puff.radius * scale * SHADE_DROP) },
+                center = puffCenter(center, puff, scale).let { it.copy(y = it.y + puff.radius * scale * SHADE_DROP) },
                 radiusX = puff.radius * scale,
                 color = palette.cloudShade,
                 alpha = coverage * cloud.depth * SHADE_STRENGTH,
@@ -109,7 +109,7 @@ internal fun DrawScope.drawClouds(
         }
         cloud.puffs.forEach { puff ->
             drawSoftPuff(
-                centre = puffCentre(centre, puff, scale),
+                center = puffCenter(center, puff, scale),
                 radiusX = puff.radius * scale,
                 color = palette.cloud,
                 alpha = coverage * cloud.depth,
@@ -118,9 +118,9 @@ internal fun DrawScope.drawClouds(
     }
 }
 
-private fun puffCentre(cloudCentre: Offset, puff: CloudField.Puff, scale: Float) = Offset(
-    x = cloudCentre.x + puff.offset.x * scale,
-    y = cloudCentre.y + puff.offset.y * scale,
+private fun puffCenter(cloudCenter: Offset, puff: CloudField.Puff, scale: Float) = Offset(
+    x = cloudCenter.x + puff.offset.x * scale,
+    y = cloudCenter.y + puff.offset.y * scale,
 )
 
 /**
@@ -132,7 +132,7 @@ private fun puffCentre(cloudCentre: Offset, puff: CloudField.Puff, scale: Float)
  * become solid where several puffs overlap, which is where a cloud is thickest.
  */
 private fun DrawScope.drawSoftPuff(
-    centre: Offset,
+    center: Offset,
     radiusX: Float,
     color: Color,
     alpha: Float,
@@ -143,7 +143,7 @@ private fun DrawScope.drawSoftPuff(
     RINGS.forEach { (scale, strength) ->
         drawOval(
             color = color.copy(alpha = alpha * strength),
-            topLeft = Offset(centre.x - radiusX * scale, centre.y - radiusY * scale),
+            topLeft = Offset(center.x - radiusX * scale, center.y - radiusY * scale),
             size = Size(radiusX * 2f * scale, radiusY * 2f * scale),
         )
     }

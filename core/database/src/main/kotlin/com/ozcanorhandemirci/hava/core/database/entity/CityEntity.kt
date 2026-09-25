@@ -11,8 +11,8 @@ import androidx.room.PrimaryKey
  * here. That is what stops a city found through search from being stored a
  * second time next to the copy that shipped with the application.
  *
- * Favouring is held as the moment it happened rather than as a flag, which
- * costs the same and gives the favourites list its order for nothing.
+ * Favoring is held as the moment it happened rather than as a flag, which
+ * costs the same and gives the favorites list its order for nothing.
  */
 @Entity(tableName = "cities")
 data class CityEntity(

@@ -8,7 +8,7 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.SkyPalette
 import kotlin.math.sin
 
 /**
- * The base of every sky: the fall of colour from the zenith to the horizon.
+ * The base of every sky: the fall of color from the zenith to the horizon.
  *
  * Stops are placed rather than spread evenly, because light overhead changes
  * slowly and light near the ground changes quickly.
@@ -38,7 +38,7 @@ internal fun DrawScope.drawFog(palette: SkyPalette, amount: Float, seconds: Floa
     repeat(BANK_COUNT) { index ->
         val phase = index.toFloat() / BANK_COUNT
         val drift = sin(seconds * BANK_DRIFT_SPEED + phase * TWO_PI) * BANK_TRAVEL
-        val centre = (BANK_TOP + phase * BANK_SPREAD + drift).coerceIn(0f, 1f)
+        val center = (BANK_TOP + phase * BANK_SPREAD + drift).coerceIn(0f, 1f)
 
         drawRect(
             brush = Brush.verticalGradient(
@@ -47,8 +47,8 @@ internal fun DrawScope.drawFog(palette: SkyPalette, amount: Float, seconds: Floa
                     palette.cloud.copy(alpha = amount * BANK_STRENGTH),
                     Color.Transparent,
                 ),
-                startY = (centre - BANK_HEIGHT) * size.height,
-                endY = (centre + BANK_HEIGHT) * size.height,
+                startY = (center - BANK_HEIGHT) * size.height,
+                endY = (center + BANK_HEIGHT) * size.height,
             ),
         )
     }

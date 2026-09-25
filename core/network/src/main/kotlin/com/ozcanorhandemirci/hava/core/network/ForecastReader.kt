@@ -87,7 +87,7 @@ private fun HourlyDto.toPoints(): List<HourlyPoint> {
             apparentTemperature = Temperature.ofCelsius(apparentTemperature[index]),
             kind = WeatherKind.fromWmoCode(weatherCode[index]),
             precipitationProbabilityPercent = precipitationProbability.getOrNull(index) ?: 0,
-            precipitationMillimetres = precipitation.getOrNull(index) ?: 0.0,
+            precipitationMillimeters = precipitation.getOrNull(index) ?: 0.0,
             windSpeedKph = windSpeed.getOrNull(index) ?: 0.0,
             isDay = isDay.getOrNull(index) != 0,
         )

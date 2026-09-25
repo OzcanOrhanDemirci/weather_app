@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 /**
  * Wraps the application in the sky it is currently showing.
  *
- * Passing a different [palette] repaints every component that reads a colour
+ * Passing a different [palette] repaints every component that reads a color
  * from the theme, which is how moving from a clear afternoon in Izmir to a
  * snowy night in Erzurum changes the whole interface and not only the backdrop.
  */

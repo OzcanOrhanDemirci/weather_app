@@ -24,6 +24,7 @@ import com.ozcanorhandemirci.hava.core.sky.layer.StarField
 import com.ozcanorhandemirci.hava.core.sky.layer.drawClouds
 import com.ozcanorhandemirci.hava.core.sky.layer.drawFog
 import com.ozcanorhandemirci.hava.core.sky.layer.drawLightning
+import com.ozcanorhandemirci.hava.core.sky.layer.drawLuminaryGlow
 import com.ozcanorhandemirci.hava.core.sky.layer.drawMoon
 import com.ozcanorhandemirci.hava.core.sky.layer.drawPrecipitation
 import com.ozcanorhandemirci.hava.core.sky.layer.drawSkyGradient
@@ -79,21 +80,13 @@ fun Sky(
 
         val body = state.visibleBody
         if (body.altitudeDegrees > BODY_VISIBLE_ABOVE) {
-            val centre = body.toScreenPosition(state.conditions.coordinates.latitude, size)
-            if (state.showsSun) {
-                drawSun(
-                    centre = centre,
-                    palette = palette,
-                    altitudeDegrees = body.altitudeDegrees,
-                    obscured = maxOf(coverage, fog),
-                )
-            } else {
-                drawMoon(
-                    centre = centre,
-                    palette = palette,
-                    phase = state.moonPhase,
-                    obscured = maxOf(coverage, fog),
-                )
+            val center = body.toScreenPosition(state.conditions.coordinates.latitude, size)
+            val obscured = maxOf(coverage, fog)
+
+            when {
+                detail == SkyDetail.Backdrop -> drawLuminaryGlow(center, palette, obscured)
+                state.showsSun -> drawSun(center, palette, body.altitudeDegrees, obscured)
+                else -> drawMoon(center, palette, state.moonPhase, obscured)
             }
         }
 
@@ -105,15 +98,17 @@ fun Sky(
             windFactor = 1f + (state.conditions.windSpeedKph / WIND_REFERENCE).toFloat(),
         )
 
-        drawPrecipitation(
-            field = precipitation,
-            palette = palette,
-            precipitation = kind.precipitation,
-            intensity = kind.intensity,
-            seconds = seconds,
-            windSpeedKph = state.conditions.windSpeedKph,
-            windDirectionDegrees = state.conditions.windDirectionDegrees,
-        )
+        if (detail != SkyDetail.Backdrop) {
+            drawPrecipitation(
+                field = precipitation,
+                palette = palette,
+                precipitation = kind.precipitation,
+                intensity = kind.intensity,
+                seconds = seconds,
+                windSpeedKph = state.conditions.windSpeedKph,
+                windDirectionDegrees = state.conditions.windDirectionDegrees,
+            )
+        }
 
         drawFog(palette = palette, amount = fog, seconds = seconds)
 
@@ -197,6 +192,7 @@ private data class Budget(val stars: Int, val clouds: Int, val particles: Int) {
         fun of(detail: SkyDetail): Budget = when (detail) {
             SkyDetail.Full -> Budget(stars = 160, clouds = 8, particles = 180)
             SkyDetail.Miniature -> Budget(stars = 40, clouds = 4, particles = 60)
+            SkyDetail.Backdrop -> Budget(stars = 120, clouds = 6, particles = 0)
         }
     }
 }

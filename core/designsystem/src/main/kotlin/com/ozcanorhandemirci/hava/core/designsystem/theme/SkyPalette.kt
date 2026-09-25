@@ -5,19 +5,19 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /**
- * The colours of one sky.
+ * The colors of one sky.
  *
  * The application carries no fixed palette. Every screen is drawn over a
  * backdrop derived from the weather and the local time of the place on show,
  * and this type is the contract between that backdrop and everything painted
- * on top of it. A component asks for the colour of a role; it never chooses a
- * literal colour of its own.
+ * on top of it. A component asks for the color of a role; it never chooses a
+ * literal color of its own.
  */
 @Immutable
 data class SkyPalette(
-    /** Colour at the top of the dome. */
+    /** Color at the top of the dome. */
     val zenith: Color,
-    /** Colour where the dome meets the ground. */
+    /** Color where the dome meets the ground. */
     val horizon: Color,
     /** Atmospheric haze mixed in close to the horizon. */
     val haze: Color,
@@ -29,9 +29,9 @@ data class SkyPalette(
     val cloudShade: Color,
     /** Accent for interactive elements and highlights. */
     val accent: Color,
-    /** Primary colour for content placed over this sky. */
+    /** Primary color for content placed over this sky. */
     val content: Color,
-    /** Colour for content that must recede. */
+    /** Color for content that must recede. */
     val contentMuted: Color,
     /** Fill of the translucent surfaces that carry content. */
     val glass: Color,

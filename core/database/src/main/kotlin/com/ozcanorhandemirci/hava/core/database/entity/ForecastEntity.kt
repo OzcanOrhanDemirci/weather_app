@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 /**
  * The last forecast received for a city, stored exactly as the service sent it.
  *
- * Storing the response rather than a set of normalised rows is deliberate. A
+ * Storing the response rather than a set of normalized rows is deliberate. A
  * forecast is read as a whole and replaced as a whole; it is never queried by
  * hour or joined against anything. Splitting it across three tables would buy
  * nothing and would add a second way to turn the wire format into the domain,
