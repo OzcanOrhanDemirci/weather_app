@@ -32,6 +32,14 @@ answers and keeps working when the network is gone.
 | --- | --- | --- | --- |
 | ![Twenty cities](docs/images/cities.png) | ![A city](docs/images/detail-day.png) | ![The same city at three in the morning](docs/images/detail-night.png) | ![Offline](docs/images/offline.png) |
 
+Turned on its side it is laid out again rather than stretched: the list becomes
+two columns, and a city becomes two panes with the reading held in place while
+the forecast scrolls beside it.
+
+| Two columns | Two panes |
+| --- | --- |
+| ![The list on a turned phone, in two columns](docs/images/wide-cities.png) | ![One city on a turned phone: the reading on the left, the forecast scrolling on the right](docs/images/wide-detail.png) |
+
 ## Where this was built
 
 > **This application was written at a Youth Camp, during the Türkcell Kamp+
