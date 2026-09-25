@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -14,10 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -44,9 +41,9 @@ import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaSpacing
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
 import com.ozcanorhandemirci.hava.core.model.WeatherError
 import com.ozcanorhandemirci.hava.core.sky.SkyConditions
+import com.ozcanorhandemirci.hava.core.ui.CityGrid
 import com.ozcanorhandemirci.hava.core.ui.CitySummary
 import com.ozcanorhandemirci.hava.core.ui.SkyOf
-import com.ozcanorhandemirci.hava.core.ui.CityWeatherCard
 import com.ozcanorhandemirci.hava.core.ui.adviceResource
 import com.ozcanorhandemirci.hava.core.ui.headlineResource
 import kotlin.math.abs
@@ -85,8 +82,8 @@ internal fun CitiesScreen(
     onCitySelected: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState()
-    val following = (state as? CitiesUiState.Content)?.cities?.skyFollowing(listState)
+    val gridState = rememberLazyGridState()
+    val following = (state as? CitiesUiState.Content)?.cities?.skyFollowing(gridState)
 
     // The backdrop belongs to the card nearest the middle of the viewport, so
     // scrolling from the coast to the mountains carries the whole interface
@@ -94,24 +91,22 @@ internal fun CitiesScreen(
     SkyOf(following?.skyConditions())
 
     Box(modifier = modifier.fillMaxSize()) {
-        run {
-            when (state) {
-                CitiesUiState.Loading -> LoadingState()
-                CitiesUiState.Empty -> EmptyState()
-                is CitiesUiState.Failed -> FailedState(reason = state.reason, onRetry = onRefresh)
-                is CitiesUiState.Content -> PullToRefreshBox(
-                    isRefreshing = state.isRefreshing,
-                    onRefresh = onRefresh,
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    CityList(
-                        state = state,
-                        listState = listState,
-                        onCitySelected = onCitySelected,
-                        onRetry = onRefresh,
-                    )
-                    StatusBarVeil(modifier = Modifier.align(Alignment.TopCenter))
-                }
+        when (state) {
+            CitiesUiState.Loading -> LoadingState()
+            CitiesUiState.Empty -> EmptyState()
+            is CitiesUiState.Failed -> FailedState(reason = state.reason, onRetry = onRefresh)
+            is CitiesUiState.Content -> PullToRefreshBox(
+                isRefreshing = state.isRefreshing,
+                onRefresh = onRefresh,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                CityList(
+                    state = state,
+                    gridState = gridState,
+                    onCitySelected = onCitySelected,
+                    onRetry = onRefresh,
+                )
+                StatusBarVeil(modifier = Modifier.align(Alignment.TopCenter))
             }
         }
     }
@@ -147,36 +142,24 @@ private fun StatusBarVeil(modifier: Modifier = Modifier) {
 @Composable
 private fun CityList(
     state: CitiesUiState.Content,
-    listState: LazyListState,
+    gridState: LazyGridState,
     onCitySelected: (Long) -> Unit,
     onRetry: () -> Unit,
 ) {
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            start = HavaSpacing.gutter,
-            end = HavaSpacing.gutter,
-            // Room for the floating navigation bar, which stands over the list
-            // rather than beside it.
-            bottom = BOTTOM_INSET,
-        ),
-        verticalArrangement = Arrangement.spacedBy(HavaSpacing.compact),
-    ) {
-        item(key = "header") {
-            Header(modifier = Modifier.statusBarsPadding().padding(bottom = HavaSpacing.small))
-        }
-
-        if (state.problem != null) {
-            item(key = "problem") {
-                ProblemBanner(reason = state.problem, onRetry = onRetry)
-            }
-        }
-
-        items(items = state.cities, key = { it.city.id }) { summary ->
-            CityWeatherCard(summary = summary, onClick = { onCitySelected(summary.city.id) })
-        }
+    val problem = state.problem
+    val banner: (@Composable () -> Unit)? = problem?.let {
+        { ProblemBanner(reason = it, onRetry = onRetry) }
     }
+
+    CityGrid(
+        cities = state.cities,
+        onCitySelected = onCitySelected,
+        state = gridState,
+        banner = banner,
+        header = {
+            Header(modifier = Modifier.statusBarsPadding().padding(bottom = HavaSpacing.small))
+        },
+    )
 }
 
 @Composable
@@ -298,15 +281,19 @@ private fun FailedState(reason: WeatherError, onRetry: () -> Unit) {
  * this.
  */
 @Composable
-private fun List<CitySummary>.skyFollowing(listState: LazyListState): CitySummary? {
+private fun List<CitySummary>.skyFollowing(gridState: LazyGridState): CitySummary? {
     val cities = this
     val focusedId by remember(cities) {
         derivedStateOf {
-            val layout = listState.layoutInfo
+            val layout = gridState.layoutInfo
             val middle = (layout.viewportStartOffset + layout.viewportEndOffset) / 2
             layout.visibleItemsInfo
                 .filter { it.key is Long }
-                .minByOrNull { abs(it.offset + it.size / 2 - middle) }
+                // Only the distance down the list counts. Where a card sits
+                // across a row of two says nothing about which weather is being
+                // looked at, and the first of a tied row is as good an answer
+                // as the second.
+                .minByOrNull { abs(it.offset.y + it.size.height / 2 - middle) }
                 ?.key as? Long
         }
     }
@@ -330,9 +317,6 @@ private fun CitySummary.skyConditions(): SkyConditions? {
         windDirectionDegrees = current.wind.directionDegrees,
     )
 }
-
-/** Height of the floating navigation bar plus the gap under the last card. */
-private val BOTTOM_INSET = 116.dp
 
 /**
  * How long the focus has to hold still before the sky moves to it.

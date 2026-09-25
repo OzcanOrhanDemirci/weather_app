@@ -9,7 +9,12 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -58,6 +63,11 @@ import com.ozcanorhandemirci.hava.navigation.HavaTab
  * The navigation bar leaves with the tabs. A city is a place a reader went into
  * rather than one of three places they can be, and offering to switch tabs from
  * inside it would say otherwise.
+ *
+ * The sky is drawn to every edge, including under a camera cutout, because that
+ * is what makes the window look like weather rather than a page. Screens are
+ * held clear of the cutout sideways instead, which costs nothing upright and
+ * keeps a temperature off the lens once the phone is turned.
  */
 @Composable
 fun HavaApp(modifier: Modifier = Modifier) {
@@ -96,7 +106,11 @@ fun HavaApp(modifier: Modifier = Modifier) {
                 NavHost(
                     navController = navController,
                     startDestination = CitiesDestination,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(
+                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal),
+                        ),
                     enterTransition = {
                         scaleIn(initialScale = OPENING_SCALE, animationSpec = tween(TRANSITION_MILLIS)) +
                             fadeIn(animationSpec = tween(TRANSITION_MILLIS))

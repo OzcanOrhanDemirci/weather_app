@@ -3,12 +3,9 @@ package com.ozcanorhandemirci.hava.feature.favorites
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,8 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaSpacing
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
-import androidx.compose.ui.unit.dp
-import com.ozcanorhandemirci.hava.core.ui.CityWeatherCard
+import com.ozcanorhandemirci.hava.core.ui.CityGrid
 
 @Composable
 fun FavoritesRoute(
@@ -67,39 +63,22 @@ internal fun FavoritesScreen(
                 )
             }
 
-            is FavoritesUiState.Content -> LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = HavaSpacing.gutter,
-                    end = HavaSpacing.gutter,
-                    bottom = BOTTOM_INSET,
-                ),
-                verticalArrangement = Arrangement.spacedBy(HavaSpacing.compact),
+            is FavoritesUiState.Content -> CityGrid(
+                cities = state.cities,
+                onCitySelected = onCitySelected,
             ) {
-                item(key = "header") {
-                    Column(
-                        modifier = Modifier
-                            .statusBarsPadding()
-                            .padding(top = HavaSpacing.large, bottom = HavaSpacing.small),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.favorites_title),
-                            style = MaterialTheme.typography.displaySmall,
-                            color = HavaTheme.sky.content,
-                        )
-                    }
-                }
-
-                items(items = state.cities, key = { it.city.id }) { summary ->
-                    CityWeatherCard(
-                        summary = summary,
-                        onClick = { onCitySelected(summary.city.id) },
+                Column(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(top = HavaSpacing.large, bottom = HavaSpacing.small),
+                ) {
+                    Text(
+                        text = stringResource(R.string.favorites_title),
+                        style = MaterialTheme.typography.displaySmall,
+                        color = HavaTheme.sky.content,
                     )
                 }
             }
         }
     }
 }
-
-/** Room for the floating navigation bar, which stands over the list. */
-private val BOTTOM_INSET = 116.dp

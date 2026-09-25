@@ -8,6 +8,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ozcanorhandemirci.hava.core.designsystem.component.GlassSurface
+import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaLayout
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaMotion
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaSpacing
 import com.ozcanorhandemirci.hava.core.designsystem.theme.HavaTheme
@@ -126,92 +128,99 @@ private fun Loaded(
     val hours = remember(snapshot) { snapshot.comingHours() }
 
     var selected by rememberSaveable(state.city.id) { mutableIntStateOf(0) }
-    val index = selected.coerceIn(hours.indices)
-    val hour = hours.getOrNull(index)
+    // Clamped against the count rather than the indices, because a forecast
+    // with no hours in it has no valid index to coerce towards.
+    val index = selected.coerceIn(0, (hours.size - 1).coerceAtLeast(0))
+    val hour = hours.getOrNull(index) ?: return
 
     val conditions = remember(hour, state.city) {
-        hour?.let {
-            SkyConditions(
-                kind = it.kind,
-                instant = it.time,
-                coordinates = state.city.coordinates,
-                windSpeedKph = it.windSpeedKph,
-                windDirectionDegrees = snapshot.current.wind.directionDegrees,
-            )
-        }
-    } ?: return
+        SkyConditions(
+            kind = hour.kind,
+            instant = hour.time,
+            coordinates = state.city.coordinates,
+            windSpeedKph = hour.windSpeedKph,
+            windDirectionDegrees = snapshot.current.wind.directionDegrees,
+        )
+    }
 
     // Dragging the hourly curve moves this, and with it the light behind every
     // screen the reader can see.
     SkyOf(conditions)
 
-    Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(horizontal = HavaSpacing.gutter),
-            verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
-        ) {
-            TopRow(
-                title = state.city.name,
-                subtitle = state.city.region,
-                isFavorite = state.isFavorite,
-                onBack = onBack,
-                onFavoriteChange = onFavoriteChange,
-            )
+    // Where the reader is, what it is like there, and what it is going to do.
+    // Held apart because a window wide enough to show the last two at once
+    // should not make the reader scroll one of them away to reach the other.
+    val topRow: @Composable () -> Unit = {
+        TopRow(
+            title = state.city.name,
+            subtitle = state.city.region,
+            isFavorite = state.isFavorite,
+            onBack = onBack,
+            onFavoriteChange = onFavoriteChange,
+        )
+    }
 
-            Hero(
-                hour = hour ?: return@Column,
-                snapshot = snapshot,
-                isNow = index == 0,
+    val reading: @Composable () -> Unit = {
+        Hero(
+            hour = hour,
+            snapshot = snapshot,
+            isNow = index == 0,
+            zone = zone,
+            onReturnToNow = { selected = 0 },
+        )
+    }
+
+    val forecast: @Composable () -> Unit = {
+        if (state.problem != null) {
+            Problem(reason = state.problem, onRetry = onRefresh)
+        }
+
+        Section(title = stringResource(R.string.detail_hourly)) {
+            HourlyCurve(
+                hours = hours,
                 zone = zone,
-                onReturnToNow = { selected = 0 },
+                selectedIndex = index,
+                onSelect = { selected = it },
             )
+        }
 
-            if (state.problem != null) {
-                Problem(reason = state.problem, onRetry = onRefresh)
-            }
-
-            Section(title = stringResource(R.string.detail_hourly)) {
-                HourlyCurve(
-                    hours = hours,
+        snapshot.today?.let { today ->
+            Section(title = stringResource(R.string.detail_sun)) {
+                SunArc(
+                    sunrise = today.sunrise,
+                    sunset = today.sunset,
+                    now = snapshot.current.observedAt,
                     zone = zone,
-                    selectedIndex = index,
-                    onSelect = { selected = it },
                 )
             }
+        }
 
-            snapshot.today?.let { today ->
-                Section(title = stringResource(R.string.detail_sun)) {
-                    SunArc(
-                        sunrise = today.sunrise,
-                        sunset = today.sunset,
-                        now = snapshot.current.observedAt,
-                        zone = zone,
-                    )
-                }
-            }
+        Section(title = stringResource(R.string.detail_week)) {
+            DailyOutlook(days = snapshot.daily)
+        }
 
-            Section(title = stringResource(R.string.detail_week)) {
-                DailyOutlook(days = snapshot.daily)
-            }
+        Section(title = stringResource(R.string.detail_conditions)) {
+            Readings(snapshot = snapshot)
+        }
 
-            Section(title = stringResource(R.string.detail_conditions)) {
-                Readings(snapshot = snapshot)
-            }
+        Column(modifier = Modifier.padding(bottom = HavaSpacing.section)) {
+            Text(
+                text = stringResource(
+                    R.string.detail_updated_at,
+                    remember(zone) { TIME_FORMAT.withZone(zone) }.format(state.forecast.retrievedAt),
+                ),
+                style = HavaTheme.typography.overline,
+                color = HavaTheme.sky.contentMuted,
+            )
+        }
+    }
 
-            Column(modifier = Modifier.padding(bottom = HavaSpacing.section)) {
-                Text(
-                    text = stringResource(
-                        R.string.detail_updated_at,
-                        remember(zone) { TIME_FORMAT.withZone(zone) }.format(state.forecast.retrievedAt),
-                    ),
-                    style = HavaTheme.typography.overline,
-                    color = HavaTheme.sky.contentMuted,
-                )
+    Box(modifier = modifier.fillMaxSize()) {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            if (maxWidth >= HavaLayout.twoPaneWidth) {
+                TwoPanes(topRow = topRow, reading = reading, forecast = forecast)
+            } else {
+                OnePane(topRow = topRow, reading = reading, forecast = forecast)
             }
         }
 
@@ -223,6 +232,78 @@ private fun Loaded(
                     .statusBarsPadding()
                     .padding(top = HavaSpacing.small),
             )
+        }
+    }
+}
+
+/** A phone held upright: one column, the reading first and the forecast under it. */
+@Composable
+private fun OnePane(
+    topRow: @Composable () -> Unit,
+    reading: @Composable () -> Unit,
+    forecast: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = HavaSpacing.gutter),
+        verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
+    ) {
+        topRow()
+        reading()
+        forecast()
+    }
+}
+
+/**
+ * A window with room across: the reading on one side, the forecast on the other.
+ *
+ * The temperature keeps its place while the hours, the sun and the week move
+ * beside it, so following the curve is watched rather than remembered. Each
+ * side scrolls on its own, because the short one reaching its end is no reason
+ * for the long one to stop.
+ *
+ * The name and the heart stay above both. They say which city all of this is,
+ * which is as true of one side as of the other, and a heart standing at the
+ * inner edge of a pane would look like it belonged to that pane.
+ */
+@Composable
+private fun TwoPanes(
+    topRow: @Composable () -> Unit,
+    reading: @Composable () -> Unit,
+    forecast: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(horizontal = HavaSpacing.gutter),
+        verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
+    ) {
+        topRow()
+
+        Row(horizontalArrangement = Arrangement.spacedBy(HavaSpacing.large)) {
+            Column(
+                modifier = Modifier
+                    .weight(READING_SHARE)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
+            ) {
+                reading()
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f - READING_SHARE)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(HavaSpacing.medium),
+            ) {
+                forecast()
+            }
         }
     }
 }
@@ -480,6 +561,14 @@ private fun WeatherError.headline(): Int = when (this) {
     WeatherError.UnknownPlace -> R.string.detail_error_unknown_place
     is WeatherError.Unexpected -> R.string.detail_error_unexpected
 }
+
+/**
+ * How much of a wide window the reading takes.
+ *
+ * Less than half. It is a temperature and three lines under it, while the other
+ * side carries four panels that each want their full width.
+ */
+private const val READING_SHARE = 0.42f
 
 private val TIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
