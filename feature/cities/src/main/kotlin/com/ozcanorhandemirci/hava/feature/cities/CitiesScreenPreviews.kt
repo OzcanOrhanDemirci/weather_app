@@ -52,6 +52,23 @@ private fun CitiesContentWithProblem() {
     )
 }
 
+/**
+ * A first run with no network: the cities are seeded but none of them has ever
+ * had a reading. The banner has to say something different here, because there
+ * is nothing stored for it to be showing.
+ */
+@Preview(name = "Failed refresh with nothing stored", showBackground = true)
+@Composable
+private fun CitiesProblemWithNothingStored() {
+    PreviewScreen(
+        CitiesUiState.Content(
+            cities = listOf(waiting, izmir.copy(snapshot = null)),
+            isRefreshing = false,
+            problem = WeatherError.Offline,
+        ),
+    )
+}
+
 @Preview(name = "Loading", showBackground = true)
 @Composable
 private fun CitiesLoading() {

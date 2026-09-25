@@ -147,8 +147,14 @@ private fun CityList(
     onRetry: () -> Unit,
 ) {
     val problem = state.problem
+
+    // Whether anything was stored decides what the banner may claim, and the
+    // cities are the only place that knows. A city with no snapshot has never
+    // had a reading on this device.
+    val hasStoredWeather = state.cities.any { it.snapshot != null }
+
     val banner: (@Composable () -> Unit)? = problem?.let {
-        { ProblemBanner(reason = it, onRetry = onRetry) }
+        { ProblemBanner(reason = it, hasStoredWeather = hasStoredWeather, onRetry = onRetry) }
     }
 
     CityGrid(
@@ -182,13 +188,24 @@ private fun Header(modifier: Modifier = Modifier) {
 }
 
 /**
- * Shown when a refresh failed but the device still holds a forecast.
+ * Shown when a refresh failed.
  *
- * It sits above the list rather than replacing it, because the weather on
- * screen is still true. Only its age has changed.
+ * It sits above the list rather than replacing it, because when the device
+ * holds a forecast the weather on screen is still true and only its age has
+ * changed.
+ *
+ * The second line is not always that, though. On a first run with no network
+ * there is nothing stored, and a banner saying so over twenty cards that all
+ * read "waiting for a reading" is a sentence contradicted by everything under
+ * it. A reader who is told something plainly false about what they are looking
+ * at has no reason to believe the rest of the screen.
  */
 @Composable
-private fun ProblemBanner(reason: WeatherError, onRetry: () -> Unit) {
+private fun ProblemBanner(
+    reason: WeatherError,
+    hasStoredWeather: Boolean,
+    onRetry: () -> Unit,
+) {
     GlassSurface(modifier = Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(HavaSpacing.tiny)) {
             Text(
@@ -197,7 +214,13 @@ private fun ProblemBanner(reason: WeatherError, onRetry: () -> Unit) {
                 color = HavaTheme.sky.content,
             )
             Text(
-                text = stringResource(R.string.cities_problem_showing_stored),
+                text = stringResource(
+                    if (hasStoredWeather) {
+                        R.string.cities_problem_showing_stored
+                    } else {
+                        R.string.cities_problem_nothing_stored
+                    },
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = HavaTheme.sky.contentMuted,
             )

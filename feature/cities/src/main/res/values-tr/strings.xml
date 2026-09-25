@@ -2,6 +2,7 @@
 <resources>
     <string name="cities_subtitle">Yirmi gökyüzü, hepsi şu anki hâliyle</string>
     <string name="cities_problem_showing_stored">Bu cihazda en son saklanan veri gösteriliyor.</string>
+    <string name="cities_problem_nothing_stored">Henüz hiçbir veri saklanmadı, gösterilecek hava durumu yok.</string>
     <string name="cities_empty_title">Henüz yer yok</string>
     <string name="cities_empty_body">Gökyüzünü takip etmek için bir şehir arayın.</string>
 

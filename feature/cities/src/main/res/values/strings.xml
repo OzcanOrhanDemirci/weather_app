@@ -4,6 +4,7 @@
     <string name="cities_title" translatable="false">Hava</string>
     <string name="cities_subtitle">Twenty skies, all of them right now</string>
     <string name="cities_problem_showing_stored">Showing what was last stored on this device.</string>
+    <string name="cities_problem_nothing_stored">Nothing has been stored yet, so there is no weather to show.</string>
     <string name="cities_empty_title">No places yet</string>
     <string name="cities_empty_body">Search for a city to follow its sky.</string>
 
