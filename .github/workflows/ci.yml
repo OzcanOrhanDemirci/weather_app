@@ -41,11 +41,24 @@ jobs:
       - name: Run Android Lint
         run: ./gradlew lint --stacktrace
 
+      # Kept whatever the outcome, because the run worth reading is the one
+      # that failed.
       - name: Upload lint reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: lint-reports
           path: "**/build/reports/lint-results-*.html"
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/**
+            **/build/test-results/**/*.xml
           if-no-files-found: ignore
           retention-days: 7
