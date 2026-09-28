@@ -13,7 +13,12 @@ with it, so it is worth stating plainly.
 - **No personal data is collected, stored or transmitted.** Location is never
   requested: a city is chosen from a list or searched for by name, never
   detected. The manifest asks for two permissions, `INTERNET` and
-  `ACCESS_NETWORK_STATE`, and nothing else.
+  `ACCESS_NETWORK_STATE`. A third one appears in the built package,
+  `com.ozcanorhandemirci.hava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`: it is
+  added during the build by `androidx.core`, it is declared at the `signature`
+  protection level and it is named after this application, so nothing outside
+  this package can hold it. Those three are all of them, and reading them out
+  of the package is the way to confirm it.
 - **Everything the application knows is on the device**, in a Room database
   holding the chosen cities and the last forecast for each. It goes away with
   the application.

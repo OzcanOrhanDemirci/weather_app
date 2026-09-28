@@ -3,7 +3,13 @@
 
     <!-- The only permissions this application asks for. It has no backend of
          its own, reads nothing from the device, and asks for no location: a
-         city is chosen, never detected. -->
+         city is chosen, never detected.
+
+         A third one is added to the merged manifest by androidx.core:
+         DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, declared at the signature
+         level and named after this package, so it is held by nothing else.
+         SECURITY.md says so too, because the package is what a reader
+         inspects, not this file. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

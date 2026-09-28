@@ -8,13 +8,59 @@ Each version corresponds to a `v`-prefixed tag, and each tag produced a signed
 package through the release pipeline described in
 [docs/RELEASE.md](docs/RELEASE.md).
 
-Every version below was released on the same day. The application was written
-during the Türkcell Kamp+ information technology camp, and the dates are what
-they are.
+Versions 1.0.0 to 1.2.2 were released on the same day: the application was
+written during the Türkcell Kamp+ information technology camp, and the dates are
+what they are. 1.3.0 came afterwards, when the repository was opened.
 
 ## [Unreleased]
 
 Nothing yet.
+
+## [1.3.0] — 2026-09-28
+
+The camp is over and this repository is being opened. Most of this version is
+about the repository rather than the application, so that it says the same
+thing to someone arriving at it cold as it does to whoever wrote it. The one
+change to the package itself is a removal: JUnit is no longer inside it.
+
+### Added
+
+- A hook that holds a commit message to the convention as it is written.
+  Finding out after a push that a subject is wrong means rewriting history;
+  finding out at the moment of writing means retyping a line.
+- The README opens with the package: a badge carrying the current version and a
+  link that downloads it, above a line of links to the sections worth reading
+  first.
+- The verification pipeline can be started by hand. One that can only be run by
+  changing something cannot be used to check that it still passes without one.
+
+### Changed
+
+- A release is published as a release rather than as a pre-release, and its
+  notes are the section written for that version in this file rather than a
+  list of commit subjects assembled afterwards. A version nobody wrote up here
+  is not published at all.
+- The rule that commit subjects are held to lives in one file, read by both the
+  pipeline and the hook. It was about to live in two, and two copies of a rule
+  are two rules waiting to disagree.
+
+### Fixed
+
+- The link to the latest release led nowhere. Every release up to this one was
+  published as a pre-release, and "latest" passes those over.
+- **JUnit was being packaged into the application.** `core:common` published its
+  shared main-dispatcher rule out of `main`, which made the libraries that rule
+  is written against part of the library itself, and put `junit` and
+  `hamcrest-core` on the release classpath. The rule is now a test fixture: it
+  still reaches the two test classes that use it and no longer reaches a
+  device. R8 had already removed the classes, so what was actually shipping was
+  13 KB of JUnit resources.
+- The security policy said the application asks for two permissions "and
+  nothing else". The built package carries a third,
+  `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, added during the build by
+  `androidx.core`, declared at the `signature` level and named after this
+  package. The policy asks its reader to inspect the package, so it now says
+  what the package says.
 
 ## [1.2.2] — 2026-09-25
 
@@ -157,7 +203,8 @@ search, and a release pipeline that signs and publishes what it built.
   pipeline that refuses to publish a tag disagreeing with the declared version,
   or a package signed with the wrong key.
 
-[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.1.0...v1.2.0
