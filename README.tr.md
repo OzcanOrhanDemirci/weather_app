@@ -9,6 +9,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
 [![Asgari SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
+[![Son sürüm](https://img.shields.io/github/v/release/OzcanOrhanDemirci/weather_app?label=release&color=success)](https://github.com/OzcanOrhanDemirci/weather_app/releases/latest)
 [![Lisans](https://img.shields.io/badge/lisans-MIT-blue)](LICENSE)
 
 **Gençlik Kampı'nda, [Türkcell Kamp+](#bu-proje-nerede-yazıldı) Bilişim Kampı kapsamında yazıldı.**
@@ -16,6 +17,10 @@
 [![Türkcell Kamp+](https://img.shields.io/badge/T%C3%BCrkcell%20Kamp%2B-Bili%C5%9Fim%20Kamp%C4%B1-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
 [![Program](https://img.shields.io/badge/Program-Mobil%20Uygulama%20Geli%C5%9Ftirme-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
 [![Turkcell Akademi](https://img.shields.io/badge/Turkcell-Akademi-FFC72C?labelColor=1a1a1a)](#bu-proje-nerede-yazıldı)
+
+**[Son paketi indirin](https://github.com/OzcanOrhanDemirci/weather_app/releases/latest)** · Android 8.0 ve üstü · hesap yok, anahtar yok, toplanan hiçbir şey yok
+
+[Fikir](#fikir) · [Kararlar](#okumaya-değer-kararlar) · [Mimari](#mimari) · [Neler doğrulanıyor](#neler-doğrulanıyor) · [Derleme](#derleme) · [Erişilebilirlik](#erişilebilirlik)
 
 *[English](README.md)*
 
@@ -257,3 +262,8 @@ License altında kullanılıyor; koşulları `core/designsystem/licenses` içind
 
 Hava verisi [Open-Meteo](https://open-meteo.com) tarafından sağlanıyor, CC BY 4.0
 altında kullanılıyor.
+
+## Yazar
+
+**Özcan Orhan Demirci** · Flutter ve Android geliştiricisi, İzmir ·
+[github.com/OzcanOrhanDemirci](https://github.com/OzcanOrhanDemirci)

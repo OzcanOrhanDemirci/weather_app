@@ -124,6 +124,17 @@ explains where the boundaries are and why. A few rules that are easy to miss:
 All three run on every pull request and all three must pass before a change can
 reach `main`.
 
+The last of the three can also run while a message is being written rather than
+after it has been pushed:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+That points the checkout at `.githooks/commit-msg`, which applies the rule out
+of the same file the pipeline reads. A subject caught there costs a retyped
+line. The same subject caught after a push costs a rewritten history.
+
 Beyond that, this project holds one rule above the rest:
 
 > **Run it on the screen before saying it is done.**

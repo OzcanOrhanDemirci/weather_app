@@ -73,6 +73,24 @@ jobs:
           mv app/build/outputs/apk/release/app-release.apk "hava-$version.apk"
           ls -l "hava-$version.apk"
 
+      # The notes on a release should be the ones written for that version by
+      # hand, not a list of commit subjects assembled afterwards. They are in
+      # the changelog already, so the pipeline reads them out of it, and a
+      # version nobody wrote up there is not published at all.
+      - name: Take the notes out of the changelog
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v heading="## [$version]" '
+            index($0, heading) == 1 { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "CHANGELOG.md has no section for $version" >&2
+            exit 1
+          fi
+          cat notes.md
+
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -80,8 +98,9 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           gh release create "$GITHUB_REF_NAME" "hava-$version.apk" \
             --title "Hava $version" \
-            --generate-notes \
-            --prerelease
+            --notes-file notes.md \
+            --verify-tag \
+            --latest
 
       - name: Keep the mapping file
         uses: actions/upload-artifact@v7

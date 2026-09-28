@@ -8,13 +8,49 @@ Each version corresponds to a `v`-prefixed tag, and each tag produced a signed
 package through the release pipeline described in
 [docs/RELEASE.md](docs/RELEASE.md).
 
-Every version below was released on the same day. The application was written
-during the Türkcell Kamp+ information technology camp, and the dates are what
-they are.
+Versions 1.0.0 to 1.2.2 were released on the same day: the application was
+written during the Türkcell Kamp+ information technology camp, and the dates are
+what they are. 1.3.0 came afterwards, when the repository was opened.
 
 ## [Unreleased]
 
 Nothing yet.
+
+## [1.3.0] — 2026-09-28
+
+The camp is over and this repository is being opened. Nothing in this version
+changes the application: what 1.3.0 packages is what 1.2.2 packaged. What
+changed is everything around it, so that the repository says the same thing to
+someone arriving at it cold as it does to whoever wrote it.
+
+### Added
+
+- A hook that holds a commit message to the convention as it is written.
+  Finding out after a push that a subject is wrong means rewriting history;
+  finding out at the moment of writing means retyping a line.
+- The README opens with the package: a badge carrying the current version and a
+  link that downloads it, above a line of links to the sections worth reading
+  first.
+- The verification pipeline can be started by hand. One that can only be run by
+  changing something cannot be used to check that it still passes without one.
+
+### Changed
+
+- A release is published as a release rather than as a pre-release, and its
+  notes are the section written for that version in this file rather than a
+  list of commit subjects assembled afterwards. A version nobody wrote up here
+  is not published at all.
+- The rule that commit subjects are held to lives in one file, read by both the
+  pipeline and the hook. It was about to live in two, and two copies of a rule
+  are two rules waiting to disagree.
+
+### Fixed
+
+- `main` now carries the protection this repository has described since 1.2.1:
+  no direct pushes, no force pushes, linear history, and both checks green
+  before a merge. It was written down before it was switched on.
+- The link to the latest release led nowhere. Every release up to this one was
+  published as a pre-release, and "latest" passes those over.
 
 ## [1.2.2] — 2026-09-25
 
@@ -157,7 +193,8 @@ search, and a release pipeline that signs and publishes what it built.
   pipeline that refuses to publish a tag disagreeing with the declared version,
   or a package signed with the wrong key.
 
-[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/OzcanOrhanDemirci/weather_app/compare/v1.1.0...v1.2.0

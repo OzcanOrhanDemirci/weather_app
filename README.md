@@ -9,6 +9,7 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
 [![Min SDK](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)](https://developer.android.com)
+[![Latest release](https://img.shields.io/github/v/release/OzcanOrhanDemirci/weather_app?label=release&color=success)](https://github.com/OzcanOrhanDemirci/weather_app/releases/latest)
 [![Licence](https://img.shields.io/badge/licence-MIT-blue)](LICENSE)
 
 **Built at a Youth Camp, in the [Türkcell Kamp+](#where-this-was-built) information technology camp.**
@@ -16,6 +17,10 @@
 [![Türkcell Kamp+](https://img.shields.io/badge/T%C3%BCrkcell%20Kamp%2B-Information%20Technology%20Camp-FFC72C?labelColor=1a1a1a)](#where-this-was-built)
 [![Programme](https://img.shields.io/badge/Programme-Mobile%20Development-FFC72C?labelColor=1a1a1a)](#where-this-was-built)
 [![Turkcell Akademi](https://img.shields.io/badge/Turkcell-Akademi-FFC72C?labelColor=1a1a1a)](#where-this-was-built)
+
+**[Download the latest package](https://github.com/OzcanOrhanDemirci/weather_app/releases/latest)** · Android 8.0 and above · no account, no key, nothing collected
+
+[The idea](#the-idea) · [Decisions](#decisions-worth-reading) · [Architecture](#architecture) · [What is verified](#what-is-verified) · [Building](#building) · [Accessibility](#accessibility)
 
 *[Türkçe](README.tr.md)*
 
@@ -261,3 +266,8 @@ MIT. See [LICENSE](LICENSE). The bundled Inter typeface is used under the SIL
 Open Font License; its terms are in `core/designsystem/licenses`.
 
 Weather data by [Open-Meteo](https://open-meteo.com), used under CC BY 4.0.
+
+## Author
+
+**Özcan Orhan Demirci** · Flutter and Android developer, İzmir ·
+[github.com/OzcanOrhanDemirci](https://github.com/OzcanOrhanDemirci)
