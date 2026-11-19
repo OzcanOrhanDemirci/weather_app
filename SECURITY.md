@@ -53,7 +53,7 @@ published.
 
 Use GitHub's
 [private vulnerability reporting](https://github.com/OzcanOrhanDemirci/weather_app/security/advisories/new),
-or write to **ozcanorhandem@gmail.com** with `weather_app security` in the
+or write to **mail@ozcanorhandemirci.com** with `weather_app security` in the
 subject.
 
 Please include what you found, the version or commit you found it in, and the
